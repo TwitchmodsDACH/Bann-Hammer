@@ -48,17 +48,19 @@ Dazu in den sich öffnenden Editor den Inhalt der Datei [tmbbannhammer.user.js](
 
 Sobald nun eine Twitch Seite besucht wird (ggf. offene Tabs neuladen) wird in einem Kanal in dem ihr Moderator seid unter dem Chat ein kleiner BannHammer angezeigt:
 
+1. Durch anklicken öffnet sich der BannHammer
+
 ![](dokumentation/bannhammer.png)
 
-Durch anklicken öffnet sich der Bannhammer
+2. Anklicken des Logos
 
 ![](dokumentation/bannhammer1.png)
 
-Jetzt noch auf das Logo klicken und ihre seid im Menü.
+3. Liste einfügen oder auswählen
 
 ![](dokumentation/bannhammer2.png)
 
-Liste einfügen oder auswählen und bannen/unbannen
+4. Bannen/Entbannen
 
 ![](dokumentation/bannhammer3.png)
 
@@ -66,6 +68,10 @@ Liste einfügen oder auswählen und bannen/unbannen
 
 **WICHTIG**: Es darf nur einen Twitch Tab im Browser-Fenster geben, sobald ein weiteren Tab dazukommt, versucht der Bannhammer dort zu bannen.
 
+**HINWEIS**: Bei einigen kommt es je nach Einstellungen mit Erweiterungen wie Frankers/BetterTTV/7TVAPP zu Problem.
+Hier ggf. für das Bannen diese Erweiterungen deaktivieren, wenn man Probleme hat.
+
+### Postion des Fensters
 Wem die Position des Menüs nicht gefällt, diese kann im Code angepasst werden
 
 ```
@@ -82,9 +88,6 @@ Wem die Position des Menüs nicht gefällt, diese kann im Code angepasst werden
             min-width: 500px;
       }
 ```
-
-Bei einigen kommt es je nach Einstellungen mit Erweiterungen wie Frankers/BetterTTV/7TVAPP zu Problem.
-Hier ggf. für das Bannen diese Erweiterungen deaktivieren, wenn man Probleme hat.
 
 ## Support
 Unsere Mitglieder sind herzlich eingeladen im Discord ein Ticket im Kanal tmd-support zu öffnen.
