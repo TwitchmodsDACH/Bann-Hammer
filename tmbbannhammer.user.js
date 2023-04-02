@@ -3,10 +3,10 @@
 // @name            TwitchModsDACH Bann-Hammer (by RaidHammer)
 // @description     A tool for moderating Twitch easier during hate raids
 // @namespace       https://github.com/TwitchmodsDACH/Bann-Hammer
-// @version         1.1.4.4
+// @version         1.1.4.5
 // @match           *://*.twitch.tv/*
 // @run-at          document-idle
-// @author          Original by victornpb - Modified by TwitchModsDACH
+// @author          victornpb
 // @homepageURL     https://github.com/TwitchmodsDACH/Bann-Hammer
 // @supportURL      https://github.com/TwitchmodsDACH/Bann-Hammer
 // @contributionURL https://github.com/TwitchmodsDACH/Bann-Hammer
@@ -27,7 +27,7 @@
       "id": 1,
       "enabled": true,
       "name": "Allow All",
-      "match": "https://github.com/TwitchmodsDACH/Bannlisten/raw/main/*",
+      "match": "https://raw.githubusercontent.com/TwitchmodsDACH/Bannlisten/main/*",
       "action": "allow",
       "responseHeaders": [{
         "name": "Access-Control-Allow-Origin",
@@ -155,13 +155,12 @@
     <div class="header">
         <span style="flex-grow: 1;"></span>
         <h5 class="logo">
-            <a href="https://github.com/TwitchmodsDACH/Bann-Hammer" target="_blank">
-              <svg version="1.0" xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 1280 1280" style="color: #34ae0c;fill: currentcolor;">
-                <path d="M517 1c-16 3-28 10-41 22l-10 10 161 160 161 161 2-2c6-4 17-19 21-25 10-19 12-44 4-64-6-14-5-13-120-129L576 17c-8-7-18-12-27-15-8-1-25-2-32-1zM249 250 77 422l161 161 161 161 74-74 74-75 18 19 18 18-2 4c-4 6-4 14-1 20a28808 28808 0 0 0 589 621c4 2 6 3 13 3 6 0 8-1 13-3 6-4 79-77 82-83 4-9 4-21-2-29l-97-93-235-223-211-200c-51-47-73-68-76-69-6-3-13-3-19 0l-5 3-18-18-18-18 74-74 74-74-161-161L422 77 249 250zM23 476a75 75 0 0 0-10 95c4 6 219 222 231 232 8 7 16 11 26 14 6 2 10 2 22 2s14 0 22-2l14-6c5-4 20-16 24-21l2-2-161-161L32 466l-9 10z"/>
-              </svg>&nbsp;&nbsp;TwitchModsDACH Bann-Hammer&nbsp;&nbsp;<svg version="1.0" xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 1280 1280" style="color: #34ae0c;fill: currentcolor;">
+
+            <a href="https://github.com/TwitchmodsDACH/Bann-Hammer" target="_blank" style="color: #34ae0c;">Bann-Hammer&nbsp;&nbsp;
+              <svg version="1.0" xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="5 5 1280 1280" style="color: #34ae0c;fill: currentcolor;align:center;">
                 <path d="M517 1c-16 3-28 10-41 22l-10 10 161 160 161 161 2-2c6-4 17-19 21-25 10-19 12-44 4-64-6-14-5-13-120-129L576 17c-8-7-18-12-27-15-8-1-25-2-32-1zM249 250 77 422l161 161 161 161 74-74 74-75 18 19 18 18-2 4c-4 6-4 14-1 20a28808 28808 0 0 0 589 621c4 2 6 3 13 3 6 0 8-1 13-3 6-4 79-77 82-83 4-9 4-21-2-29l-97-93-235-223-211-200c-51-47-73-68-76-69-6-3-13-3-19 0l-5 3-18-18-18-18 74-74 74-74-161-161L422 77 249 250zM23 476a75 75 0 0 0-10 95c4 6 219 222 231 232 8 7 16 11 26 14 6 2 10 2 22 2s14 0 22-2l14-6c5-4 20-16 24-21l2-2-161-161L32 466l-9 10z"/>
               </svg>
-          </a>
+              &nbsp;&nbsp;TwitchModsDACH Edition&nbsp;v1.1.4.5</a>
         </h5><br \>
 
         <span style="flex-grow: 1;"></span>
@@ -176,16 +175,16 @@
         <div style="align:center">
           <button class="mdgBtnTrolls" style="width:32%">Add mdg_hate_trolls</button>
           <button class="mdgBtnViewerBots" style="width:33%">Add mdg_viewer_bots</button>
-          <button class="mdgBtnUnban" style="width:32%">Add mdg_unban</button>
+          <button class="mdgBtnUnban" style="width:32%;color:#34ae0c">Add mdg_unban</button>
         </div>
         <div style="align:center">
           <button class="mdgBtnFlirtyMad" style="width:32%">Add mdg_flirty_mad </button>
           <button class="mdgBtnFollowBot" style="width:33%">Add mdg_follow_bots</button>
-          <button class="mdgBtnAdvertising" style="width:32%">Add mdg_advertising</button>
+          <button class="tmdBtnUnban" style="width:32%;color:#34ae0c">Add TMD_unban</button>
         </div>
         <div style="align:center">
-          <button class="mdgBtnSpamBots" style="width:32%">Add mdg_spam_bots</button>
-          <button class="mdgBtnStreamsniper" style="width:33%">Add mdg_streamsniper</button>
+          <button class="mdgBtnAdvertising" style="width:32%">Add mdg_advertising</button>
+          <button class="mdgBtnSpamBots" style="width:33%">Add mdg_spam_bots</button>
           <button class="tmdBtnCrossban" style="width:32%">Add TMD_crossbans</button>
         </div>
     </div>
@@ -202,7 +201,7 @@
           </div>
         </div>
     </div>
-    <div class="footer"><a href="https://github.com/victornpb/twitch-mass-ban" target="_blank">This software is a fork of RaidHammer</a> - <samp>Version: 1.1.4.4</samp>
+    <div class="footer"><a href="https://github.com/TwitchmodsDACH/Bannlisten" target="_blank" style="color: #34ae0c;">TwitchModsDACH Bannlisten</a>
     </div>
 </div>
 `;
@@ -288,7 +287,7 @@
     d.querySelector(".banAll").onclick = banAll;
     d.querySelector(".closeBtn").onclick = hide;
     d.querySelector(".unbanAll").onclick = unbanAll;
-    d.querySelector(".back").onclick = toggleImport;
+    d.querySelector(".back").onclick = toggleBack;
     d.querySelector(".import button.mdgBtnUnban").onclick = importMDGUnban;
     d.querySelector(".import button.mdgBtnTrolls").onclick = importMDGtrolls;
     d.querySelector(".import button.mdgBtnViewerBots").onclick = importMDGViewerBots;
@@ -296,7 +295,7 @@
     d.querySelector(".import button.mdgBtnFollowBot").onclick = importMDGFollowBot;
     d.querySelector(".import button.mdgBtnAdvertising").onclick = importMDGAdvertising;
     d.querySelector(".import button.mdgBtnSpamBots").onclick = importMDGSpamBots;
-    d.querySelector(".import button.mdgBtnStreamsniper").onclick = importMDGStreamsniper;
+    d.querySelector(".import button.tmdBtnUnban").onclick = importTMDUnban;
     d.querySelector(".import button.tmdBtnCrossban").onclick = importTMDCrossban;
     d.querySelector(".import button.importBtn").onclick = importList;
 
@@ -345,6 +344,25 @@
         }
     }
 
+    function toggleBack() {
+      queueList.clear();
+      document.getElementById("textfield").value = "";
+      body = d.querySelector(".body");
+      insertText("")
+      console.log(queueList)
+      importDiv = d.querySelector(".import");
+      body = d.querySelector(".body");
+      if (importDiv.style.display !== 'none') {
+            importDiv.style.display = 'none';
+            body.style.display = '';
+      } else {
+            importDiv.style.display = '';
+            body.style.display = 'none';
+            d.querySelector(".import textarea").focus();
+      }
+
+    }
+
     function importList() {
         const textarea = d.querySelector(".import textarea");
         const lines = textarea.value.split(/\n/).map(line => line.trim()).filter(Boolean);
@@ -361,6 +379,7 @@
     }
 
     function importMDGtrolls() {
+      queueList.clear();
       var usersToBan = [];
       fetch("https://raw.githubusercontent.com/TwitchmodsDACH/Bannlisten/main/mdg_hate_troll_list.txt")
         .then((response) => response.text())
@@ -371,11 +390,11 @@
             textarea.value = '';
             console.log(queueList)
             insertText(Array.from(queueList).join("\n"))
-            toggleImport();
-            renderList();
+            if (queueList.size != "0") { toggleImport(); renderList(); }
         });
     }
     function importMDGUnban() {
+      queueList.clear();
       var usersToBan = [];
       fetch("https://raw.githubusercontent.com/TwitchmodsDACH/Bannlisten/main/mdg_unbanlist.txt")
         .then((response) => response.text())
@@ -386,11 +405,11 @@
             textarea.value = '';
             console.log(queueList)
             insertText(Array.from(queueList).join("\n"))
-            toggleImport();
-            renderList();
+            if (queueList.size != "0") { toggleImport(); renderList(); }
         });
     }
     function importMDGViewerBots() {
+      queueList.clear();
       var usersToBan = [];
       fetch("https://raw.githubusercontent.com/TwitchmodsDACH/Bannlisten/main/mdg_viewer_bot_list.txt")
         .then((response) => response.text())
@@ -401,11 +420,11 @@
             textarea.value = '';
             console.log(queueList)
             insertText(Array.from(queueList).join("\n"))
-            toggleImport();
-            renderList();
+            if (queueList.size != "0") { toggleImport(); renderList(); }
         });
     }
     function importMDGFlirtyMad() {
+      queueList.clear();
       var usersToBan = [];
       fetch("https://raw.githubusercontent.com/TwitchmodsDACH/Bannlisten/main/mdg_flirt_mad_manipulate_list.txt")
         .then((response) => response.text())
@@ -416,11 +435,11 @@
             textarea.value = '';
             console.log(queueList)
             insertText(Array.from(queueList).join("\n"))
-            toggleImport();
-            renderList();
+            if (queueList.size != "0") { toggleImport(); renderList(); }
         });
     }
     function importMDGFollowBot() {
+      queueList.clear();
       var usersToBan = [];
       fetch("https://raw.githubusercontent.com/TwitchmodsDACH/Bannlisten/main/mdg_follower_bot_list.txt")
         .then((response) => response.text())
@@ -431,11 +450,11 @@
             textarea.value = '';
             console.log(queueList)
             insertText(Array.from(queueList).join("\n"))
-            toggleImport();
-            renderList();
+            if (queueList.size != "0") { toggleImport(); renderList(); }
         });
     }
     function importMDGAdvertising() {
+      queueList.clear();
       var usersToBan = [];
       fetch("https://raw.githubusercontent.com/TwitchmodsDACH/Bannlisten/main/mdg_unauthorized_advertising_list.txt")
         .then((response) => response.text())
@@ -446,11 +465,11 @@
             textarea.value = '';
             console.log(queueList)
             insertText(Array.from(queueList).join("\n"))
-            toggleImport();
-            renderList();
+            if (queueList.size != "0") { toggleImport(); renderList(); }
         });
     }
     function importMDGSpamBots() {
+      queueList.clear();
       var usersToBan = [];
       fetch("https://raw.githubusercontent.com/TwitchmodsDACH/Bannlisten/main/mdg_spam_bot_list.txt")
         .then((response) => response.text())
@@ -461,13 +480,13 @@
             textarea.value = '';
             console.log(queueList)
             insertText(Array.from(queueList).join("\n"))
-            toggleImport();
-            renderList();
+            if (queueList.size != "0") { toggleImport(); renderList(); }
         });
     }
-    function importMDGStreamsniper() {
+    function importTMDUnban() {
+      queueList.clear();
       var usersToBan = [];
-      fetch("https://raw.githubusercontent.com/TwitchmodsDACH/Bannlisten/main/mdg_streamsniper_list.txt")
+      fetch("https://raw.githubusercontent.com/TwitchmodsDACH/Bannlisten/main/tmd_unbanlist.txt")
         .then((response) => response.text())
         .then((data) => {
             console.log(data)
@@ -476,11 +495,11 @@
             textarea.value = '';
             console.log(queueList)
             insertText(Array.from(queueList).join("\n"))
-            toggleImport();
-            renderList();
+            if (queueList.size != "0") { toggleImport(); renderList(); }
         });
     }
     function importTMDCrossban() {
+      queueList.clear();
       var usersToBan = [];
       fetch("https://raw.githubusercontent.com/TwitchmodsDACH/Bannlisten/main/tmd_cross_banlist.txt")
         .then((response) => response.text())
@@ -491,8 +510,7 @@
             textarea.value = '';
             console.log(queueList)
             insertText(Array.from(queueList).join("\n"))
-            toggleImport();
-            renderList();
+            if (queueList.size != "0") { toggleImport(); renderList(); }
         });
     }
 
@@ -668,7 +686,7 @@
           <button class="accountage" data-user="${item}" title="Check account age">?</button>
           <button class="ignore" data-user="${item}">Ignore</button>
           <button class="ban" data-user="${item}">Ban</button>
-          <button class="unban" data-user="${item}">Unan</button>
+          <button class="unban" data-user="${item}">UnBan</button>
           <span>${item}</span>
         </li>
       `;
