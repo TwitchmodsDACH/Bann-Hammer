@@ -648,7 +648,7 @@
           <button class="accountage" data-user="${item}" title="Check account age">?</button>
           <button class="ignore" data-user="${item}">Ignore</button>
           <button class="ban" data-user="${item}">Ban</button>
-          <button class="unban" data-user="${item}">Unan</button>
+          <button class="unban" data-user="${item}">Unban</button>
           <span>${item}</span>
         </li>
       `;
