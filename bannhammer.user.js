@@ -1,4 +1,3 @@
-
 // ==UserScript==
 // @name            TwitchModsDACH Bann-Hammer (by RaidHammer)
 // @description     A tool for moderating Twitch easier during hate raids
@@ -20,10 +19,10 @@
 
 
 (function () {
-    // This function is requried to disable CORS for the GitHub Bannlist Repo
+    // This function is requried to disable CORS for the GitHub ban list repository
     // https://portswigger.net/web-security/cors
     // If you didn't require this ban lists you can disable this
-    var rule1 = {
+    var corsDisable = {
       "id": 1,
       "enabled": true,
       "name": "Allow All",
@@ -31,11 +30,20 @@
       "action": "allow",
       "responseHeaders": [{
         "name": "Access-Control-Allow-Origin",
-        "value": "*"
+        "value": "https://raw.githubusercontent.com/TwitchmodsDACH/Bannlisten/main/*"
       }]
     };
-    GM_setValue("rule1", rule1);
+    GM_setValue("corsDisable", corsDisable);
 
+    // Globle required Variables
+    let queueList = new Set();
+    let ignoredList = new Set();
+    let bannedList = new Set();
+    const LOGPREFIX = '[RAIDHAMMER]';
+    const delay = t => new Promise(r => setTimeout(r, t));
+
+
+    // Frontend
     var html = /*html*/`
     <div id="raidhammer" class="raidhammer">
     <style>
@@ -189,7 +197,6 @@
         </div>
     </div>
     <div class="body">
-
         <div class="list"></div>
         <div style="display: flex; margin: 5px;">
           <span style="flex-grow: 2;"></span>
@@ -201,13 +208,9 @@
           </div>
         </div>
     </div>
-    <div class="footer"><a href="https://github.com/TwitchmodsDACH/Bannlisten" target="_blank" style="color: #34ae0c;">TwitchModsDACH Bannlisten</a>
-    </div>
-</div>
-`;
-
-
-    const LOGPREFIX = '[RAIDHAMMER]';
+    <div class="footer">
+      <a href="https://github.com/TwitchmodsDACH/Bannlisten" target="_blank" style="color: #34ae0c;">TwitchModsDACH Bannlisten</a>
+    </div>`;
 
     // modal
     const d = document.createElement("div");
@@ -222,6 +225,7 @@
         <path d="M517 1c-16 3-28 10-41 22l-10 10 161 160 161 161 2-2c6-4 17-19 21-25 10-19 12-44 4-64-6-14-5-13-120-129L576 17c-8-7-18-12-27-15-8-1-25-2-32-1zM249 250 77 422l161 161 161 161 74-74 74-75 18 19 18 18-2 4c-4 6-4 14-1 20a28808 28808 0 0 0 589 621c4 2 6 3 13 3 6 0 8-1 13-3 6-4 79-77 82-83 4-9 4-21-2-29l-97-93-235-223-211-200c-51-47-73-68-76-69-6-3-13-3-19 0l-5 3-18-18-18-18 74-74 74-74-161-161L422 77 249 250zM23 476a75 75 0 0 0-10 95c4 6 219 222 231 232 8 7 16 11 26 14 6 2 10 2 22 2s14 0 22-2l14-6c5-4 20-16 24-21l2-2-161-161L32 466l-9 10z"/>
       </svg>
     `;
+
     activateBtn.style.cssText = `
         display: inline-flex;
         -webkit-box-align: center;
@@ -263,11 +267,6 @@
                 console.log(LOGPREFIX, 'Mod tools available. Adding button...');
                 twitchBar.insertBefore(activateBtn, twitchBar.firstChild);
                 document.body.appendChild(d);
-                /*if (!enabled) {
-                    console.log(LOGPREFIX, 'Started chatWatchdog...');
-                    watchdogTimer = setInterval(chatWatchdog, 500);
-                    enabled = true;
-                }*/
             }
         }
         else {
@@ -280,7 +279,6 @@
         }
     }
     setInterval(appendActivatorBtn, 5000);
-
 
     //events
     d.querySelector(".ignoreAll").onclick = ignoreAll;
@@ -311,8 +309,7 @@
 
     });
 
-    const delay = t => new Promise(r => setTimeout(r, t));
-
+    //Functions
     function show() {
         console.log(LOGPREFIX, 'Show');
         d.style.display = '';
@@ -349,7 +346,6 @@
       document.getElementById("textfield").value = "";
       body = d.querySelector(".body");
       insertText("")
-      console.log(queueList)
       importDiv = d.querySelector(".import");
       body = d.querySelector(".body");
       if (importDiv.style.display !== 'none') {
@@ -384,324 +380,249 @@
       fetch("https://raw.githubusercontent.com/TwitchmodsDACH/Bannlisten/main/mdg_hate_troll_list.txt")
         .then((response) => response.text())
         .then((data) => {
-            console.log(data)
             usersToBan.push(...data.split("\n").filter(Boolean));
-            usersToBan.forEach(name => queueList.add(name));
+            usersToBan.forEach(name => queueList.add(name.replace(/\r/g, "")));
             textarea.value = '';
-            console.log(queueList)
-            insertText(Array.from(queueList).join("\n"))
+            insertText(Array.from(queueList))
             if (queueList.size != "0") { toggleImport(); renderList(); }
         });
     }
+
     function importMDGUnban() {
       queueList.clear();
       var usersToBan = [];
       fetch("https://raw.githubusercontent.com/TwitchmodsDACH/Bannlisten/main/mdg_unbanlist.txt")
         .then((response) => response.text())
         .then((data) => {
-            console.log(data)
             usersToBan.push(...data.split("\n").filter(Boolean));
-            usersToBan.forEach(name => queueList.add(name));
+            usersToBan.forEach(name => queueList.add(name.replace(/\r/g, "")));
             textarea.value = '';
-            console.log(queueList)
-            insertText(Array.from(queueList).join("\n"))
+            insertText(Array.from(queueList))
             if (queueList.size != "0") { toggleImport(); renderList(); }
         });
     }
+
     function importMDGViewerBots() {
       queueList.clear();
       var usersToBan = [];
       fetch("https://raw.githubusercontent.com/TwitchmodsDACH/Bannlisten/main/mdg_viewer_bot_list.txt")
         .then((response) => response.text())
         .then((data) => {
-            console.log(data)
             usersToBan.push(...data.split("\n").filter(Boolean));
-            usersToBan.forEach(name => queueList.add(name));
+            usersToBan.forEach(name => queueList.add(name.replace(/\r/g, "")));
             textarea.value = '';
-            console.log(queueList)
-            insertText(Array.from(queueList).join("\n"))
+            insertText(Array.from(queueList))
             if (queueList.size != "0") { toggleImport(); renderList(); }
         });
     }
+
     function importMDGFlirtyMad() {
       queueList.clear();
       var usersToBan = [];
       fetch("https://raw.githubusercontent.com/TwitchmodsDACH/Bannlisten/main/mdg_flirt_mad_manipulate_list.txt")
         .then((response) => response.text())
         .then((data) => {
-            console.log(data)
             usersToBan.push(...data.split("\n").filter(Boolean));
-            usersToBan.forEach(name => queueList.add(name));
+            usersToBan.forEach(name => queueList.add(name.replace(/\r/g, "")));
             textarea.value = '';
-            console.log(queueList)
-            insertText(Array.from(queueList).join("\n"))
+            insertText(Array.from(queueList))
             if (queueList.size != "0") { toggleImport(); renderList(); }
         });
     }
+
     function importMDGFollowBot() {
       queueList.clear();
       var usersToBan = [];
       fetch("https://raw.githubusercontent.com/TwitchmodsDACH/Bannlisten/main/mdg_follower_bot_list.txt")
         .then((response) => response.text())
         .then((data) => {
-            console.log(data)
             usersToBan.push(...data.split("\n").filter(Boolean));
-            usersToBan.forEach(name => queueList.add(name));
+            usersToBan.forEach(name => queueList.add(name.replace(/\r/g, "")));
             textarea.value = '';
-            console.log(queueList)
-            insertText(Array.from(queueList).join("\n"))
+            insertText(Array.from(queueList))
             if (queueList.size != "0") { toggleImport(); renderList(); }
         });
     }
+
     function importMDGAdvertising() {
       queueList.clear();
       var usersToBan = [];
       fetch("https://raw.githubusercontent.com/TwitchmodsDACH/Bannlisten/main/mdg_unauthorized_advertising_list.txt")
         .then((response) => response.text())
         .then((data) => {
-            console.log(data)
             usersToBan.push(...data.split("\n").filter(Boolean));
-            usersToBan.forEach(name => queueList.add(name));
+            usersToBan.forEach(name => queueList.add(name.replace(/\r/g, "")));
             textarea.value = '';
-            console.log(queueList)
-            insertText(Array.from(queueList).join("\n"))
+            insertText(Array.from(queueList))
             if (queueList.size != "0") { toggleImport(); renderList(); }
         });
     }
+
     function importMDGSpamBots() {
       queueList.clear();
       var usersToBan = [];
       fetch("https://raw.githubusercontent.com/TwitchmodsDACH/Bannlisten/main/mdg_spam_bot_list.txt")
         .then((response) => response.text())
         .then((data) => {
-            console.log(data)
             usersToBan.push(...data.split("\n").filter(Boolean));
-            usersToBan.forEach(name => queueList.add(name));
+            usersToBan.forEach(name => queueList.add(name.replace(/\r/g, "")));
             textarea.value = '';
-            console.log(queueList)
-            insertText(Array.from(queueList).join("\n"))
+            insertText(Array.from(queueList))
             if (queueList.size != "0") { toggleImport(); renderList(); }
         });
     }
+
     function importTMDUnban() {
       queueList.clear();
       var usersToBan = [];
       fetch("https://raw.githubusercontent.com/TwitchmodsDACH/Bannlisten/main/tmd_unbanlist.txt")
         .then((response) => response.text())
         .then((data) => {
-            console.log(data)
             usersToBan.push(...data.split("\n").filter(Boolean));
-            usersToBan.forEach(name => queueList.add(name));
+            usersToBan.forEach(name => queueList.add(name.replace(/\r/g, "")));
             textarea.value = '';
-            console.log(queueList)
-            insertText(Array.from(queueList).join("\n"))
+            insertText(Array.from(queueList))
             if (queueList.size != "0") { toggleImport(); renderList(); }
         });
     }
+
     function importTMDCrossban() {
       queueList.clear();
       var usersToBan = [];
       fetch("https://raw.githubusercontent.com/TwitchmodsDACH/Bannlisten/main/tmd_cross_banlist.txt")
         .then((response) => response.text())
         .then((data) => {
-            console.log(data)
             usersToBan.push(...data.split("\n").filter(Boolean));
-            usersToBan.forEach(name => queueList.add(name));
+            usersToBan.forEach(name => queueList.add(name.replace(/\r/g, "")));
             textarea.value = '';
-            console.log(queueList)
-            insertText(Array.from(queueList).join("\n"))
+            insertText(Array.from(queueList))
             if (queueList.size != "0") { toggleImport(); renderList(); }
         });
     }
 
-
-    let queueList = new Set();
-    let ignoredList = new Set();
-    let bannedList = new Set();
-
-    function chatWatchdog() {
-        const recentNames = extractRecent();
-        if (recentNames.length) {
-            const newNames = recentNames
-                .filter(name => !queueList.has(name))
-                .filter(name => !ignoredList.has(name))
-                .filter(name => !bannedList.has(name));
-
-            if (newNames.length) {
-                newNames.forEach(name => queueList.add(name));
-                onFollower();
-            }
-        }
-    }
-
-    function parseChat() {
-        return Array.from(document.querySelectorAll('[data-test-selector="chat-line-message"]')).map(chat => {
-            return {
-                username: chat.querySelector('[data-test-selector="message-username"]').innerText,
-                message: chat.querySelector('[data-test-selector="chat-line-message-body"]').innerText,
-                // timestamp: chat.querySelector('[data-test-selector="chat-timestamp"]').innerText,
-            };
-        });
-    }
-
-    function extractRecent() {
-        let newFollowers = new Set();
-        const messages = parseChat().filter(m => m.username === 'StreamElements' || m.username === 'Streamlabs');
-        for (const { message } of messages) {
-            const match = (
-                message.match(/Thank you for following ([\w_]+)/) ||
-                message.match(/Welcome! ([\w_]+) Thank you for following!/)
-            );
-            if (match) newFollowers.add(match[1]);
-        }
-
-        return [...newFollowers];
-    }
-
-    function onFollower() {
-        console.log(LOGPREFIX, 'onFollower', queueList);
-        renderList();
-        show();
-    }
-
     function ignoreAll() {
-        console.log(LOGPREFIX, 'Ignoring all...', queueList);
-        for (const user of queueList) {
+      console.log(LOGPREFIX, 'Ignoring all...', queueList);
+      for (const user of queueList) {
             ignoreItem(user);
-        }
+      }
     }
 
     async function banAll() {
-        console.log(LOGPREFIX, 'Banning all...', queueList);
-        for (const user of queueList) {
-            banItem(user);
-            await delay(125);
-        }
+      console.log(LOGPREFIX, 'Banning all...', queueList);
+      for (const user of queueList) {
+          banItem(user);
+          await delay(125);
+      }
     }
 
     async function unbanAll() {
-        console.log(LOGPREFIX, 'Banning all...', queueList);
-        for (const user of queueList) {
-            unbanItem(user);
-            await delay(125);
-        }
+      console.log(LOGPREFIX, 'Banning all...', queueList);
+      for (const user of queueList) {
+          unbanItem(user);
+          await delay(125);
+      }
     }
 
     function accountage(user) {
-        console.log(LOGPREFIX, 'Accountage', user);
-        sendMessage('!accountage ' + user);
+      console.log(LOGPREFIX, 'Accountage', user);
+      sendMessage('!accountage ' + user);
     }
 
     function ignoreItem(user) {
-        console.log(LOGPREFIX, 'Ignored user', user);
-        queueList.delete(user);
-        ignoredList.add(user);
-        renderList();
-        if (queueList.size === 0) hide(); // auto hide on the last
+      console.log(LOGPREFIX, 'Ignored user', user);
+      queueList.delete(user)
+      ignoredList.add(user)
+      renderList();
     }
 
     function unbanItem(user) {
-        console.log(LOGPREFIX, 'Unban user', user);
-        queueList.delete(user);
-        bannedList.add(user);
-        sendMessage('/unban ' + user);
-        renderList();
+      console.log(LOGPREFIX, 'Unban user', user);
+      queueList.delete(user);
+      bannedList.add(user);
+      sendMessage('/unban ' + user);
+      renderList();
     }
-
 
     function banItem(user) {
-        let banReason = document.getElementById("banReason").value;
-        console.log(LOGPREFIX, 'Ban user', user);
-        queueList.delete(user);
-        bannedList.add(user);
-        sendMessage('/ban ' + user + ' ' + banReason );
-        renderList();
-    }
+      let banReason = document.getElementById("banReason").value;
+      console.log(LOGPREFIX, 'Ban user', user);
+      queueList.delete(user);
+      bannedList.add(user);
+      sendMessage('/ban ' + user + ' ' + banReason );
+      renderList();
+     }
 
     function sendMessage(msg) {
-        try{
-            sendMessageOld(msg);
-        }
-        catch(_){
-            sendMessageSlate(msg);
-        }
+      try{
+        sendMessageOld(msg);
+      } catch(_) {
+        sendMessageSlate(msg);
+      }
     }
 
     function sendMessageOld(msg) {
-        const textarea = document.querySelector("[data-a-target='chat-input']");
-        const nativeTextAreaValueSetter = Object.getOwnPropertyDescriptor(window.HTMLTextAreaElement.prototype, "value").set;
-        nativeTextAreaValueSetter.call(textarea, msg);
-        const event = new Event('input', { bubbles: true });
-        textarea.dispatchEvent(event);
-        document.querySelector("[data-a-target='chat-send-button']").click();
+      const textarea = document.querySelector("[data-a-target='chat-input']");
+      const nativeTextAreaValueSetter = Object.getOwnPropertyDescriptor(window.HTMLTextAreaElement.prototype, "value").set;
+      nativeTextAreaValueSetter.call(textarea, msg);
+      const event = new Event('input', { bubbles: true });
+      textarea.dispatchEvent(event);
+      document.querySelector("[data-a-target='chat-send-button']").click();
     }
 
     function sendMessageSlate(msg) {
-        function _injectInput(el, data) {
-            [
-                'keydown',
-                'beforeinput',
-                //'input',
-            ].forEach((event, i) => {
-                const eventObj = {
-                    altKey: false,
-                    charCode: 0,
-                    ctrlKey: false,
-                    metaKey: false,
-                    shiftKey: false,
-                    which: '',
-                    keyCode: '',
-                    data: data,
-                    inputType: 'insertText',
-                    key: data,
-                };
-                el.dispatchEvent(new InputEvent(event, eventObj));
-            });
-        }
+      function _injectInput(el, data) {[ 'keydown', 'beforeinput'].forEach((event, i) => {
+        const eventObj = {
+          altKey: false,
+          charCode: 0,
+          ctrlKey: false,
+          metaKey: false,
+          shiftKey: false,
+          which: '',
+          keyCode: '',
+          data: data,
+          inputType: 'insertText',
+          key: data,
+        };
+      el.dispatchEvent(new InputEvent(event, eventObj));
+      });}
 
-        function _triggerKeyboardEvent(el, keyCode) {
-            const eventObj = document.createEventObject ? document.createEventObject() : document.createEvent("Events");
-            if (eventObj.initEvent) {
-                eventObj.initEvent("keydown", true, true);
-            }
-            eventObj.keyCode = keyCode;
-            eventObj.which = keyCode;
-            el.dispatchEvent ? el.dispatchEvent(eventObj) : el.fireEvent("onkeydown", eventObj);
+      function _triggerKeyboardEvent(el, keyCode) {
+        const eventObj = document.createEventObject ? document.createEventObject() : document.createEvent("Events");
+        if (eventObj.initEvent) {
+            eventObj.initEvent("keydown", true, true);
         }
+        eventObj.keyCode = keyCode;
+        eventObj.which = keyCode;
+        el.dispatchEvent ? el.dispatchEvent(eventObj) : el.fireEvent("onkeydown", eventObj);
+      }
 
-        const editor = document.querySelector('[data-slate-editor="true"]');
-        editor.focus();
-        _injectInput(editor, msg);
-        _triggerKeyboardEvent(editor, 13);
+      const editor = document.querySelector('[data-slate-editor="true"]');
+      editor.focus();
+      _injectInput(editor, msg);
+      _triggerKeyboardEvent(editor, 13);
     }
 
-
     function renderList() {
-        d.querySelector(".ignoreAll").style.display = queueList.size ? '' : 'none';
-        d.querySelector(".banAll").style.display = queueList.size ? '' : 'none';
-        d.querySelector(".back").style.display = queueList.size ? '' : 'none';
-        d.querySelector(".unbanAll").style.display = queueList.size ? '' : 'none';
-        const renderItem = item => `
-        <li>
-          <button class="accountage" data-user="${item}" title="Check account age">?</button>
-          <button class="ignore" data-user="${item}">Ignore</button>
-          <button class="ban" data-user="${item}">Ban</button>
-          <button class="unban" data-user="${item}">UnBan</button>
-          <span>${item}</span>
-        </li>
-      `;
+      d.querySelector(".ignoreAll").style.display = queueList.size ? '' : 'none';
+      d.querySelector(".banAll").style.display = queueList.size ? '' : 'none';
+      d.querySelector(".back").style.display = queueList.size ? '' : 'none';
+      d.querySelector(".unbanAll").style.display = queueList.size ? '' : 'none';
+      const renderItem = item => `
+      <li>
+        <button class="accountage" data-user="${item}" title="Check account age">?</button>
+        <button class="ignore" data-user="${item}">Ignore</button>
+        <button class="ban" data-user="${item}">Ban</button>
+        <button class="unban" data-user="${item}">UnBan</button>
+        <span>${item}</span>
+      </li>`;
 
-        let inner = queueList.size ? [...queueList].map(user => renderItem(user)).join('') : `
-          <div class="empty">
-
-              <img class="toggleImport" src="https://cdn.discordapp.com/attachments/928731319846965311/1088410170327056394/twitchmods_dach_logo_v2.png"  alt="Start RaidHammer" width="370px" style="cursor: pointer;">
-          </div>`;
+      let inner = queueList.size ? [...queueList].map(user => renderItem(user)).join('') : `
+        <div class="empty">
+          <img class="toggleImport" src="https://cdn.discordapp.com/attachments/928731319846965311/1088410170327056394/twitchmods_dach_logo_v2.png"  alt="Start RaidHammer" width="370px" style="cursor: pointer;">
+        </div>`;
         d.querySelector('.list').innerHTML = `
         <ul>
           ${inner}
-        </ul>
-      `;
+        </ul>`;
     }
-
 })();
-
