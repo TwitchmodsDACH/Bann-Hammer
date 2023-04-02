@@ -13,8 +13,8 @@ Wir wollen unseren Mitglieder damit eine einfache Möglichkeit an die Hand geben
 
 ## Status der Code-Übernahme
 - TwitchModsDACH Bannlisten integriert
-- Unban Funktion hinzugefüht
-- Bann-Grund Funktion hinzugefügt
+- Unban-Funktion hinzugefügt
+- BannGrund-Funktion hinzugefügt
 - erste unnütze Code-Schnippsel entfernt
 - Follower Überwachung ist schlecht implementiert und wird aktuell nicht genutzt
 - Um das CORS Problem zu entgehen ist aktuell noch ein weiteres Plugin nötig
@@ -41,8 +41,7 @@ Da die Erweiterung selbst noch nicht dazu in der Lage ist, muss hier der Umweg �
 	- Auf Firefox basierte Browser [CORS Unlock](https://addons.mozilla.org/de/firefox/addon/cors-unblock/)
 
 ## Installation
-Sobald beide Browser Erweiterungen installiert sind und CORS Unlock aktiv ist,
-kann man in Termper-/Grease-/ViolentMonkey ein neues User Script hinzufügen.
+Sobald beide Browser Erweiterungen installiert sind und [CORS Unlock](https://addons.mozilla.org/de/firefox/addon/cors-unblock/) aktiv ist, kann man in Termper-/Grease-/ViolentMonkey ein neues User Script hinzufügen.
 
 Dazu in den sich öffnenden Editor den Inhalt der Datei [tmbbannhammer.user.js](tmbbannhammer.user.js) kopieren und speichern.
 
