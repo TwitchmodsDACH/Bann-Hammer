@@ -3,7 +3,7 @@
 // @name            TwitchModsDACH Bann-Hammer (by RaidHammer)
 // @description     A tool for moderating Twitch easier during hate raids
 // @namespace       https://github.com/TwitchmodsDACH/Bann-Hammer
-// @version         1.1.4.1
+// @version         1.1.4.3
 // @match           *://*.twitch.tv/*
 // @run-at          document-idle
 // @author          victornpb
