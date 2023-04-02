@@ -202,7 +202,7 @@
           <span style="flex-grow: 2;"></span>
           <div class="buttons">
             <button class="back">Back</button>
-            <button class="unbanAll">Unban ALL</button>
+            <button class="unbanAll">Unban All</button>
             <button class="ignoreAll">Ignore All</button>
             <button class="banAll">Ban All</button>
           </div>
@@ -210,7 +210,7 @@
     </div>
     <div class="footer">
     <a href="https://github.com/TwitchmodsDACH/Bannlisten" target="_blank" style="color: #34ae0c;">TwitchModsDACH Bannlisten</a>&nbsp;-&nbsp;
-    <a href="https://github.com/TwitchmodsDACH/Bann-Hammer/raw/main/bannhammer.user.js">Neuste Version installieren</a>
+    <a href="https://github.com/TwitchmodsDACH/Bann-Hammer/raw/main/bannhammer.user.js">Aktuellste Version installieren</a>
     </div>`;
 
     // modal
@@ -613,7 +613,7 @@
         <button class="accountage" data-user="${item}" title="Check account age">?</button>
         <button class="ignore" data-user="${item}">Ignore</button>
         <button class="ban" data-user="${item}">Ban</button>
-        <button class="unban" data-user="${item}">UnBan</button>
+        <button class="unban" data-user="${item}">Unban</button>
         <span>${item}</span>
       </li>`;
 

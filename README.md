@@ -3,26 +3,23 @@
 Der **TwitchModsDACH Bann-Hammer** ist ein Fork von [RaidHammer](https://github.com/victornpb/twitch-mass-ban).
 Ein sehr nützliches Tool für Moderatoren die in mehreren Kanälen massenhaft Leute zu bannen haben.
 
-Da uns manche Funktionen nicht genutzt oder schlecht implementiert sind und andere wiederum gefehlt haben,
+Da uns manche Funktionen nicht genutzt oder schlecht implementiert waren und andere Funktionen wiederum gefehlt haben,
 wurde für die Community eine eigene Version des [RaidHammer](https://github.com/victornpb/twitch-mass-ban) erstellt.
 
-- Funktion die TwitchModsDACH [Bannlisten](https://github.com/TwitchmodsDACH/Bannlisten) einfach per klick zu importieren wurde hinzugefügt.
-- Ein unban-Funktion wurde eingebaut, welche ebenfalls zusätzlich zu eigenen Listen mit der von uns bereitgestellten Enbann-Liste genutzt werden kann.
-- Die Möglichkeit einen Bann-Grund anzugeben wurde hinzugefügt.
+Unseren Mitglieder soll damit eine einfache Möglichkeit an die Hand geben werden, auf einfache Weise & feingranular zu bestimmen, welche Liste gebannt oder entbannt werden soll.
 
-Wir wollen unseren Mitglieder damit eine einfache Möglichkeit an die Hand geben, auf einwache Weise feingranular zu bestimmen, welche Liste gebannt werden soll.
+## Wesentliche Veränderungen zu [RaidHammer](https://github.com/victornpb/twitch-mass-ban)
 
-## Status der Code-Übernahme
-
-- TwitchModsDACH Bannlisten integriert
+- CORS-Funktion eingebaut 
+- TwitchModsDach Bannlisten integriert
 - Unban-Funktion hinzugefügt
 - BannGrund-Funktion hinzugefügt
-- erste unnütze Code-Schnippsel entfernt
-- Follower Überwachung ist schlecht implementiert und wird aktuell nicht genutzt
+- Update-Funktion hinzugefügt
+- Re-design durchgeführt
 
 ## Voraussetzungen
 
-Ich braucht eine Möglichkeit Javascript im Browser als Skript nachladen zu können. Hier ein paar Empfehlungen:
+Eine der folgenden Erweiterungen wird benötigt
 
 - Chrome: [Violentmonkey](https://chrome.google.com/webstore/detail/violent-monkey/jinjaccalgkegednnccohejagnlnfdag) or [Tampermonkey](https://chrome.google.com/webstore/detail/dhdgffkkebhmkfjojejmpbldmpobfkfo)
 - Firefox: [Greasemonkey](https://addons.mozilla.org/en-US/firefox/addon/greasemonkey/), [Tampermonkey](https://addons.mozilla.org/en-US/firefox/addon/tampermonkey/), or [Violentmonkey](https://addons.mozilla.org/firefox/addon/violentmonkey/)
@@ -32,7 +29,9 @@ Ich braucht eine Möglichkeit Javascript im Browser als Skript nachladen zu kön
 
 ## Installation
 
-Wenn Termper-/Grease-/ViolentMonkey installiert ist, diesen Link anklicken: [bannhammer.user.js](https://github.com/TwitchmodsDACH/Bann-Hammer/raw/main/bannhammer.user.js) das User-Script wird in euer ...Monkey geladen.
+Wenn Termper-/Grease-/ViolentMonkey installiert ist, einfach diesen Link anklicken --> [bannhammer.user.js](https://github.com/TwitchmodsDACH/Bann-Hammer/raw/main/bannhammer.user.js)
+Es öffnet sich euer Monkey und man kann das User-Script mit einem Klick instalieren.
+
 Wenn alles richtig durchgeführt ist sollte es aussehen (das Logo kann variieren je nach ....Monkey).
 
 ![](dokumentation/allesaktiviert.png)
