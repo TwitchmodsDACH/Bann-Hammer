@@ -1,23 +1,40 @@
 
 // ==UserScript==
-// @name          TwitchModsDACH Bann-Hammer (by RaidHammer)
-// @description   A tool for moderating Twitch easier during hate raids
-// @namespace     https://github.com/TwitchmodsDACH/Bann-Hammer
-// @version       1.1.4.1
-// @match         *://*.twitch.tv/*
-// @run-at        document-idle
-// @author        victornpb
-// @homepageURL   https://github.com/TwitchmodsDACH/Bann-Hammer
-// @supportURL    https://github.com/TwitchmodsDACH/Bann-Hammer
+// @name            TwitchModsDACH Bann-Hammer (by RaidHammer)
+// @description     A tool for moderating Twitch easier during hate raids
+// @namespace       https://github.com/TwitchmodsDACH/Bann-Hammer
+// @version         1.1.4.1
+// @match           *://*.twitch.tv/*
+// @run-at          document-idle
+// @author          victornpb
+// @homepageURL      https://github.com/TwitchmodsDACH/Bann-Hammer
+// @supportURL      https://github.com/TwitchmodsDACH/Bann-Hammer
 // @contributionURL https://github.com/TwitchmodsDACH/Bann-Hammer
-// @grant         none
-// @license       MIT
+// @grant           GM_setValue
+// @grant           GM_getValue
+// @grant           GM_xmlhttpRequest
+// @license         MIT
 // ==/UserScript==
 
 /* jshint esversion: 8 */
 
 
 (function () {
+    // This function is requried to disable CORS for the GitHub Bannlist Repo
+    // https://portswigger.net/web-security/cors
+    // If you didn't require this ban lists you can disable this
+    var rule1 = {
+      "id": 1,
+      "enabled": true,
+      "name": "Allow All",
+      "match": "https://github.com/TwitchmodsDACH/Bannlisten/raw/main/*",
+      "action": "allow",
+      "responseHeaders": [{
+        "name": "Access-Control-Allow-Origin",
+        "value": "*"
+      }]
+    };
+    GM_setValue("rule1", rule1);
 
     var html = /*html*/`
     <div id="raidhammer" class="raidhammer">
@@ -35,6 +52,9 @@
             min-width: 500px;
         }
 
+        .raidhammer .greenhammer {
+            color: "#34ae0c"
+        }
 
         .raidhammer .header {
             display: flex;
@@ -101,13 +121,13 @@
 
         .raidhammer button.unbanAll {
             var(--color-text-button-primary);
-            background: #2BC203;
+            background: #34ae0c;
             min-width: 60px;
         }
 
         .raidhammer button.unban {
             var(--color-text-button-primary);
-            background: #2BC203;
+            background: #34ae0c;
             min-width: 60px;
         }
 
@@ -136,9 +156,9 @@
         <span style="flex-grow: 1;"></span>
         <h5 class="logo">
             <a href="https://github.com/TwitchmodsDACH/Bann-Hammer" target="_blank">
-              <svg version="1.0" xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 1280 1280" style="fill: currentcolor;">
+              <svg version="1.0" xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 1280 1280" style="color: #34ae0c;fill: currentcolor;">
                 <path d="M517 1c-16 3-28 10-41 22l-10 10 161 160 161 161 2-2c6-4 17-19 21-25 10-19 12-44 4-64-6-14-5-13-120-129L576 17c-8-7-18-12-27-15-8-1-25-2-32-1zM249 250 77 422l161 161 161 161 74-74 74-75 18 19 18 18-2 4c-4 6-4 14-1 20a28808 28808 0 0 0 589 621c4 2 6 3 13 3 6 0 8-1 13-3 6-4 79-77 82-83 4-9 4-21-2-29l-97-93-235-223-211-200c-51-47-73-68-76-69-6-3-13-3-19 0l-5 3-18-18-18-18 74-74 74-74-161-161L422 77 249 250zM23 476a75 75 0 0 0-10 95c4 6 219 222 231 232 8 7 16 11 26 14 6 2 10 2 22 2s14 0 22-2l14-6c5-4 20-16 24-21l2-2-161-161L32 466l-9 10z"/>
-              </svg>&nbsp;&nbsp;TwitchModsDACH Bann-Hammer&nbsp;&nbsp;<svg version="1.0" xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 1280 1280" style="fill: currentcolor;">
+              </svg>&nbsp;&nbsp;TwitchModsDACH Bann-Hammer&nbsp;&nbsp;<svg version="1.0" xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 1280 1280" style="color: #34ae0c;fill: currentcolor;">
                 <path d="M517 1c-16 3-28 10-41 22l-10 10 161 160 161 161 2-2c6-4 17-19 21-25 10-19 12-44 4-64-6-14-5-13-120-129L576 17c-8-7-18-12-27-15-8-1-25-2-32-1zM249 250 77 422l161 161 161 161 74-74 74-75 18 19 18 18-2 4c-4 6-4 14-1 20a28808 28808 0 0 0 589 621c4 2 6 3 13 3 6 0 8-1 13-3 6-4 79-77 82-83 4-9 4-21-2-29l-97-93-235-223-211-200c-51-47-73-68-76-69-6-3-13-3-19 0l-5 3-18-18-18-18 74-74 74-74-161-161L422 77 249 250zM23 476a75 75 0 0 0-10 95c4 6 219 222 231 232 8 7 16 11 26 14 6 2 10 2 22 2s14 0 22-2l14-6c5-4 20-16 24-21l2-2-161-161L32 466l-9 10z"/>
               </svg>
           </a>
@@ -199,7 +219,7 @@
     // activation button
     const activateBtn = document.createElement('button');
     activateBtn.innerHTML = `
-      <svg version="1.0" xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 1280 1280" style="fill: currentcolor;">
+      <svg version="1.0" xmlns="http://www.w3.org/2000/svg" width="25" height="25" viewBox="0 0 1280 1280" style="color: #34ae0c; fill: currentcolor;">
         <path d="M517 1c-16 3-28 10-41 22l-10 10 161 160 161 161 2-2c6-4 17-19 21-25 10-19 12-44 4-64-6-14-5-13-120-129L576 17c-8-7-18-12-27-15-8-1-25-2-32-1zM249 250 77 422l161 161 161 161 74-74 74-75 18 19 18 18-2 4c-4 6-4 14-1 20a28808 28808 0 0 0 589 621c4 2 6 3 13 3 6 0 8-1 13-3 6-4 79-77 82-83 4-9 4-21-2-29l-97-93-235-223-211-200c-51-47-73-68-76-69-6-3-13-3-19 0l-5 3-18-18-18-18 74-74 74-74-161-161L422 77 249 250zM23 476a75 75 0 0 0-10 95c4 6 219 222 231 232 8 7 16 11 26 14 6 2 10 2 22 2s14 0 22-2l14-6c5-4 20-16 24-21l2-2-161-161L32 466l-9 10z"/>
       </svg>
     `;
@@ -342,11 +362,11 @@
 
     function importMDGtrolls() {
       var usersToBan = [];
-      fetch("https://github.com/TwitchmodsDACH/Bannlisten/raw/main/mdg_hate_troll_list.txt")
+      fetch("https://raw.githubusercontent.com/TwitchmodsDACH/Bannlisten/main/mdg_hate_troll_list.txt")
         .then((response) => response.text())
         .then((data) => {
             console.log(data)
-            usersToBan.push(...data.split("\n"));
+            usersToBan.push(...data.split("\n").filter(Boolean));
             usersToBan.forEach(name => queueList.add(name));
             textarea.value = '';
             console.log(queueList)
@@ -361,7 +381,7 @@
         .then((response) => response.text())
         .then((data) => {
             console.log(data)
-            usersToBan.push(...data.split("\n"));
+            usersToBan.push(...data.split("\n").filter(Boolean));
             usersToBan.forEach(name => queueList.add(name));
             textarea.value = '';
             console.log(queueList)
@@ -376,7 +396,7 @@
         .then((response) => response.text())
         .then((data) => {
             console.log(data)
-            usersToBan.push(...data.split("\n"));
+            usersToBan.push(...data.split("\n").filter(Boolean));
             usersToBan.forEach(name => queueList.add(name));
             textarea.value = '';
             console.log(queueList)
@@ -391,7 +411,7 @@
         .then((response) => response.text())
         .then((data) => {
             console.log(data)
-            usersToBan.push(...data.split("\n"));
+            usersToBan.push(...data.split("\n").filter(Boolean));
             usersToBan.forEach(name => queueList.add(name));
             textarea.value = '';
             console.log(queueList)
@@ -402,11 +422,11 @@
     }
     function importMDGFollowBot() {
       var usersToBan = [];
-      fetch("https://github.com/TwitchmodsDACH/Bannlisten/raw/main/mdg_follower_bot_list.txt")
+      fetch("https://raw.githubusercontent.com/TwitchmodsDACH/Bannlisten/main/mdg_follower_bot_list.txt")
         .then((response) => response.text())
         .then((data) => {
             console.log(data)
-            usersToBan.push(...data.split("\n"));
+            usersToBan.push(...data.split("\n").filter(Boolean));
             usersToBan.forEach(name => queueList.add(name));
             textarea.value = '';
             console.log(queueList)
@@ -417,11 +437,11 @@
     }
     function importMDGAdvertising() {
       var usersToBan = [];
-      fetch("https://github.com/TwitchmodsDACH/Bannlisten/raw/main/mdg_unauthorized_advertising_list.txt")
+      fetch("https://raw.githubusercontent.com/TwitchmodsDACH/Bannlisten/main/mdg_unauthorized_advertising_list.txt")
         .then((response) => response.text())
         .then((data) => {
             console.log(data)
-            usersToBan.push(...data.split("\n"));
+            usersToBan.push(...data.split("\n").filter(Boolean));
             usersToBan.forEach(name => queueList.add(name));
             textarea.value = '';
             console.log(queueList)
@@ -432,11 +452,11 @@
     }
     function importMDGSpamBots() {
       var usersToBan = [];
-      fetch("https://github.com/TwitchmodsDACH/Bannlisten/raw/main/mdg_spam_bot_list.txt")
+      fetch("https://raw.githubusercontent.com/TwitchmodsDACH/Bannlisten/main/mdg_spam_bot_list.txt")
         .then((response) => response.text())
         .then((data) => {
             console.log(data)
-            usersToBan.push(...data.split("\n"));
+            usersToBan.push(...data.split("\n").filter(Boolean));
             usersToBan.forEach(name => queueList.add(name));
             textarea.value = '';
             console.log(queueList)
@@ -447,11 +467,11 @@
     }
     function importMDGStreamsniper() {
       var usersToBan = [];
-      fetch("https://github.com/TwitchmodsDACH/Bannlisten/raw/main/mdg_streamsniper_list.txt")
+      fetch("https://raw.githubusercontent.com/TwitchmodsDACH/Bannlisten/main/mdg_streamsniper_list.txt")
         .then((response) => response.text())
         .then((data) => {
             console.log(data)
-            usersToBan.push(...data.split("\n"));
+            usersToBan.push(...data.split("\n").filter(Boolean));
             usersToBan.forEach(name => queueList.add(name));
             textarea.value = '';
             console.log(queueList)
@@ -462,11 +482,11 @@
     }
     function importTMDCrossban() {
       var usersToBan = [];
-      fetch("https://github.com/TwitchmodsDACH/Bannlisten/raw/main/tmd_cross_banlist.txt")
+      fetch("https://raw.githubusercontent.com/TwitchmodsDACH/Bannlisten/main/tmd_cross_banlist.txt")
         .then((response) => response.text())
         .then((data) => {
             console.log(data)
-            usersToBan.push(...data.split("\n"));
+            usersToBan.push(...data.split("\n").filter(Boolean));
             usersToBan.forEach(name => queueList.add(name));
             textarea.value = '';
             console.log(queueList)
@@ -648,7 +668,7 @@
           <button class="accountage" data-user="${item}" title="Check account age">?</button>
           <button class="ignore" data-user="${item}">Ignore</button>
           <button class="ban" data-user="${item}">Ban</button>
-          <button class="unban" data-user="${item}">Unban</button>
+          <button class="unban" data-user="${item}">Unan</button>
           <span>${item}</span>
         </li>
       `;
