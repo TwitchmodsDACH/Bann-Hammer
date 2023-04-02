@@ -69,10 +69,12 @@ Sobald nun eine Twitch Seite besucht wird (ggf. offene Tabs neuladen) wird in ei
 
 **WICHTIG**: Es darf nur einen Twitch Tab im Browser-Fenster geben, sobald ein weiteren Tab dazukommt, versucht der Bannhammer dort zu bannen.
 
+**WICHTIG**: Das Tool arbeitet mit eurem Chatfenster. Klickt ihre da rein oder schreibet etwas, dann bringt ihr das Tool aus dem tritt. Das Tool ist nicht dafür gedacht, während der normladen Nutzung mit Tonnen von User betankt zu werden. Möchte man das machen ist die Empfehlung: __eigenes Browserfenster in dem nur der Kanal offen ist in dem gebannt werden soll und sonst nichts.__
+
+**WICHTIG**: __Nicht mehrere Kanäle gleichzeitig bannen!__ Hintergrund: **Shadowban-Gefahr**, da zu viele Anfragen in zu kurzer Zeit bei Twitch aufschlagen. Das mag Twitch nicht!
+
 **HINWEIS**: Bei einigen kommt es je nach Einstellungen mit Erweiterungen wie Frankers/BetterTTV/7TVAPP zu Problem.
 Hier ggf. für das Bannen diese Erweiterungen deaktivieren, wenn man Probleme hat.
-
-**PRO TIPP**: Man kann das Tool minimieren, sobald es anfängt zu bannen, es bannt dann weiter und kann durch erneutes klicken auf den BannHammer unter dem Chat wieder geöffnet werden.
 
 ### Postion des BannHammer Menü
 Wem die Position des Menüs nicht gefällt, diese kann im Code angepasst werden
