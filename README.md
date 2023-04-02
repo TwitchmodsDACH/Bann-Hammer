@@ -17,7 +17,6 @@ Wir wollen unseren Mitglieder damit eine einfache Möglichkeit an die Hand geben
 - BannGrund-Funktion hinzugefügt
 - erste unnütze Code-Schnippsel entfernt
 - Follower Überwachung ist schlecht implementiert und wird aktuell nicht genutzt
-- --Um das CORS Problem zu entgehen ist aktuell noch ein weiteres Plugin nötig--
 
 ## Voraussetzungen
 - Eine Möglichkeit im Browser JavaScript auszuführen
@@ -27,21 +26,18 @@ Wir wollen unseren Mitglieder damit eine einfache Möglichkeit an die Hand geben
 	Safari: [Tempermonkey](https://apps.apple.com/us/app/tampermonkey/id1482490089)
 	Opera: [Termpermonkey](https://addons.opera.com/en/extensions/details/tampermonkey-beta/)
 
-
 ## Installation
-Sobald beide Browser Erweiterungen installiert, kann man in Termper-/Grease-/ViolentMonkey ein neues User Script hinzufügen.
-
-Dazu in den sich öffnenden Editor den Inhalt der Datei [tmbbannhammer.user.js](https://github.com/TwitchmodsDACH/Bann-Hammer/raw/main/tmbbannhammer.user.js) kopieren und speichern.
+Wenn Termper-/Grease-/ViolentMonkey installiert ist, diesen Link anklicken: [tmbbannhammer.user.js](https://github.com/TwitchmodsDACH/Bann-Hammer/raw/main/tmbbannhammer.user.js) das User-Script wird in euer ...Monkey geladen.
 
 ![](dokumentation/allesaktiviert.png)
 
-Sobald nun eine Twitch Seite besucht wird (ggf. offene Tabs neuladen) wird in einem Kanal in dem ihr Moderator seid unter dem Chat ein kleiner BannHammer angezeigt:
+Wir eine Twitch Seite besucht (ggf. offene Tabs neuladen), wird in einem Kanal in dem man Moderator unter dem Chat ein kleiner grüner BannHammer angezeigt:
 
 1. Durch anklicken öffnet sich der BannHammer
 
 ![](dokumentation/bannhammer.png)
 
-2. Anklicken des Logos
+2. Anklicken des TwitchModsDACH Logo in der Mitte
 
 ![](dokumentation/bannhammer1.png)
 
