@@ -17,16 +17,7 @@ Wir wollen unseren Mitglieder damit eine einfache Möglichkeit an die Hand geben
 - BannGrund-Funktion hinzugefügt
 - erste unnütze Code-Schnippsel entfernt
 - Follower Überwachung ist schlecht implementiert und wird aktuell nicht genutzt
-- Um das CORS Problem zu entgehen ist aktuell noch ein weiteres Plugin nötig
-
-## Hinweis zu CORS
-CORS (Cross-Origin Resource Sharing) ist ein Mechanismus, der die Sicherheit von Websites durch die Kontrolle von Cross-Origin-Requests verbessert. Es erlaubt Websites, Ressourcen von anderen Domains zu laden, jedoch nur unter bestimmten Bedingungen, um Angriffe durch böswillige Skripte zu verhindern. CORS wird von Webbrowsern implementiert, um sicherzustellen, dass die Anfragen von anderen Domains nur dann ausgeführt werden, wenn sie von der angeforderten Domain explizit genehmigt wurden.
-
-Also eigentlich richtig und wichtig. Für den Anwendungsfall Bannlisten von anderen Webseiten automatisch einlesen zu können ist das aber hinderlich, denn es macht es unmöglich.
-
-Da die Erweiterung selbst noch nicht dazu in der Lage ist, muss hier der Umweg über eine Erweiterung genommen werden, um es für die Nutzung auszuschalten.
-
-**__UNBEDINGT NACH DER NUTZUNG CORS LOCK WIEDER EINSCHALTEN ÜBER DIE ERWEITERUNG CORS UNLOCK - EINFACH AUF DAS ICON KLICKEN (DAS C WIRD DABEI GRAU UND IST NICHT MEHR ORANGE)__**
+- --Um das CORS Problem zu entgehen ist aktuell noch ein weiteres Plugin nötig--
 
 ## Voraussetzungen
 - Eine Möglichkeit im Browser JavaScript auszuführen
@@ -36,14 +27,11 @@ Da die Erweiterung selbst noch nicht dazu in der Lage ist, muss hier der Umweg �
 	Safari: [Tempermonkey](https://apps.apple.com/us/app/tampermonkey/id1482490089)
 	Opera: [Termpermonkey](https://addons.opera.com/en/extensions/details/tampermonkey-beta/)
 
-- Die Erweiterung im Browser die CORS abschaltet
-	- Auf Chrome basierte Browser [CORS Unlock](https://chrome.google.com/webstore/detail/cors-unblock/lfhmikememgdcahcdlaciloancbhjino)
-	- Auf Firefox basierte Browser [CORS Unlock](https://addons.mozilla.org/de/firefox/addon/cors-unblock/)
 
 ## Installation
-Sobald beide Browser Erweiterungen installiert sind und [CORS Unlock](https://addons.mozilla.org/de/firefox/addon/cors-unblock/) aktiv ist, kann man in Termper-/Grease-/ViolentMonkey ein neues User Script hinzufügen.
+Sobald beide Browser Erweiterungen installiert, kann man in Termper-/Grease-/ViolentMonkey ein neues User Script hinzufügen.
 
-Dazu in den sich öffnenden Editor den Inhalt der Datei [tmbbannhammer.user.js](tmbbannhammer.user.js) kopieren und speichern.
+Dazu in den sich öffnenden Editor den Inhalt der Datei [tmbbannhammer.user.js](https://github.com/TwitchmodsDACH/Bann-Hammer/raw/main/tmbbannhammer.user.js) kopieren und speichern.
 
 ![](dokumentation/allesaktiviert.png)
 

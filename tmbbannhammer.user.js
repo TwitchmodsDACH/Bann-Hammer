@@ -3,11 +3,11 @@
 // @name            TwitchModsDACH Bann-Hammer (by RaidHammer)
 // @description     A tool for moderating Twitch easier during hate raids
 // @namespace       https://github.com/TwitchmodsDACH/Bann-Hammer
-// @version         1.1.4.3
+// @version         1.1.4.4
 // @match           *://*.twitch.tv/*
 // @run-at          document-idle
-// @author          victornpb
-// @homepageURL      https://github.com/TwitchmodsDACH/Bann-Hammer
+// @author          Original by victornpb - Modified by TwitchModsDACH
+// @homepageURL     https://github.com/TwitchmodsDACH/Bann-Hammer
 // @supportURL      https://github.com/TwitchmodsDACH/Bann-Hammer
 // @contributionURL https://github.com/TwitchmodsDACH/Bann-Hammer
 // @grant           GM_setValue
@@ -202,7 +202,7 @@
           </div>
         </div>
     </div>
-    <div class="footer"><a href="https://github.com/victornpb/twitch-mass-ban" target="_blank">This software is a fork of RaidHammer</a> - <samp>Version: 1.1.4.1</samp>
+    <div class="footer"><a href="https://github.com/victornpb/twitch-mass-ban" target="_blank">This software is a fork of RaidHammer</a> - <samp>Version: 1.1.4.4</samp>
     </div>
 </div>
 `;
