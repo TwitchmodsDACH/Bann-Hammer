@@ -73,7 +73,7 @@ Hier ggf. für das Bannen diese Erweiterungen deaktivieren, wenn man Probleme ha
 
 **PRO TIPP**: Man kann das Tool minimieren, sobald es anfängt zu bannen, es bannt dann weiter und kann durch erneutes klicken auf den BannHammer unter dem Chat wieder geöffnet werden.
 
-### Postion des BannHAmmer Menü
+### Postion des BannHammer Menü
 Wem die Position des Menüs nicht gefällt, diese kann im Code angepasst werden
 
 ```
