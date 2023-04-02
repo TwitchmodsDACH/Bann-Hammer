@@ -32,7 +32,7 @@ Ich braucht eine Möglichkeit Javascript im Browser als Skript nachladen zu kön
 
 ## Installation
 
-Wenn Termper-/Grease-/ViolentMonkey installiert ist, diesen Link anklicken: [tmbbannhammer.user.js](https://github.com/TwitchmodsDACH/Bann-Hammer/raw/main/tmbbannhammer.user.js) das User-Script wird in euer ...Monkey geladen.
+Wenn Termper-/Grease-/ViolentMonkey installiert ist, diesen Link anklicken: [bannhammer.user.js](https://github.com/TwitchmodsDACH/Bann-Hammer/raw/main/bannhammer.user.js) das User-Script wird in euer ...Monkey geladen.
 Wenn alles richtig durchgeführt ist sollte es aussehen (das Logo kann variieren je nach ....Monkey).
 
 ![](dokumentation/allesaktiviert.png)
