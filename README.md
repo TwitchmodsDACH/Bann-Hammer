@@ -1,4 +1,5 @@
 # TwitchModsDACH Bann-Hammer
+
 Der **TwitchModsDACH Bann-Hammer** ist ein Fork von [RaidHammer](https://github.com/victornpb/twitch-mass-ban).
 Ein sehr nützliches Tool für Moderatoren die in mehreren Kanälen massenhaft Leute zu bannen haben.
 
@@ -12,6 +13,7 @@ wurde für die Community eine eigene Version des [RaidHammer](https://github.com
 Wir wollen unseren Mitglieder damit eine einfache Möglichkeit an die Hand geben, auf einwache Weise feingranular zu bestimmen, welche Liste gebannt werden soll.
 
 ## Status der Code-Übernahme
+
 - TwitchModsDACH Bannlisten integriert
 - Unban-Funktion hinzugefügt
 - BannGrund-Funktion hinzugefügt
@@ -19,14 +21,17 @@ Wir wollen unseren Mitglieder damit eine einfache Möglichkeit an die Hand geben
 - Follower Überwachung ist schlecht implementiert und wird aktuell nicht genutzt
 
 ## Voraussetzungen
-- Eine Möglichkeit im Browser JavaScript auszuführen
-	Chrome: [Violentmonkey](https://chrome.google.com/webstore/detail/violent-monkey/jinjaccalgkegednnccohejagnlnfdag) or [Tampermonkey](https://chrome.google.com/webstore/detail/dhdgffkkebhmkfjojejmpbldmpobfkfo)
-	Firefox: [Greasemonkey](https://addons.mozilla.org/en-US/firefox/addon/greasemonkey/), [Tampermonkey](https://addons.mozilla.org/en-US/firefox/addon/tampermonkey/), or [Violentmonkey](https://addons.mozilla.org/firefox/addon/violentmonkey/)
-	Edge: [Tempermonkey](https://microsoftedge.microsoft.com/addons/detail/iikmkjmpaadaobahmlepeloendndfphd) or [Violentmonkey](https://microsoftedge.microsoft.com/addons/detail/eeagobfjdenkkddmbclomhiblgggliao)
-	Safari: [Tempermonkey](https://apps.apple.com/us/app/tampermonkey/id1482490089)
-	Opera: [Termpermonkey](https://addons.opera.com/en/extensions/details/tampermonkey-beta/)
+
+Ich braucht eine Möglichkeit Javascript im Browser als Skript nachladen zu können. Hier ein paar Empfehlungen:
+
+- Chrome: [Violentmonkey](https://chrome.google.com/webstore/detail/violent-monkey/jinjaccalgkegednnccohejagnlnfdag) or [Tampermonkey](https://chrome.google.com/webstore/detail/dhdgffkkebhmkfjojejmpbldmpobfkfo)
+- Firefox: [Greasemonkey](https://addons.mozilla.org/en-US/firefox/addon/greasemonkey/), [Tampermonkey](https://addons.mozilla.org/en-US/firefox/addon/tampermonkey/), or [Violentmonkey](https://addons.mozilla.org/firefox/addon/violentmonkey/)
+- Edge: [Tempermonkey](https://microsoftedge.microsoft.com/addons/detail/iikmkjmpaadaobahmlepeloendndfphd) or [Violentmonkey](https://microsoftedge.microsoft.com/addons/detail/eeagobfjdenkkddmbclomhiblgggliao)
+- Safari: [Tempermonkey](https://apps.apple.com/us/app/tampermonkey/id1482490089)
+- Opera: [Termpermonkey](https://addons.opera.com/en/extensions/details/tampermonkey-beta/)
 
 ## Installation
+
 Wenn Termper-/Grease-/ViolentMonkey installiert ist, diesen Link anklicken: [tmbbannhammer.user.js](https://github.com/TwitchmodsDACH/Bann-Hammer/raw/main/tmbbannhammer.user.js) das User-Script wird in euer ...Monkey geladen.
 
 ![](dokumentation/allesaktiviert.png)
