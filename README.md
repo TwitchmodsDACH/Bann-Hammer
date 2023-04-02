@@ -5,9 +5,11 @@ Ein sehr nützliches Tool für Moderatoren die in mehreren Kanälen massenhaft L
 Da uns manche Funktionen nicht genutzt oder schlecht implementiert sind und andere wiederum gefehlt haben,
 wurde für die Community eine eigene Version des [RaidHammer](https://github.com/victornpb/twitch-mass-ban) erstellt.
 
-Diese Version ermöglicht es, zusätzliche zu eigenen Listen, unsere [Bannlisten](https://github.com/TwitchmodsDACH/Bannlisten) zu importieren und direkt zu bannen. 
-Weiter wurde ein unban-Funktion eingebaut, welche ebenfalls zusätzlich zu eigenen Listen mit der von uns bereitgestellten Enbann-Liste genutzt werden kann.
-ZU guterletzt gibt es noch die Möglichkeit einen Bann-Grund anzugeben.
+- Funktion die TwitchModsDACH [Bannlisten](https://github.com/TwitchmodsDACH/Bannlisten) einfach per klick zu importieren wurde hinzugefügt.
+- Ein unban-Funktion wurde eingebaut, welche ebenfalls zusätzlich zu eigenen Listen mit der von uns bereitgestellten Enbann-Liste genutzt werden kann.
+- Die Möglichkeit einen Bann-Grund anzugeben wurde hinzugefügt.
+
+Wir wollen unseren Mitglieder damit eine einfache Möglichkeit an die Hand geben, auf einwache Weise feingranular zu bestimmen, welche Liste gebannt werden soll.
 
 ## Status der Code-Übernahme
 - TwitchModsDACH Bannlisten integriert
