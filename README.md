@@ -1,3 +1,4 @@
+![](logo.png)
 # TwitchModsDACH Bann-Hammer
 
 Der **TwitchModsDACH Bann-Hammer** ist ein Fork von [RaidHammer](https://github.com/victornpb/twitch-mass-ban).
