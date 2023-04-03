@@ -67,7 +67,7 @@ Wir eine Twitch Seite besucht (ggf. offene Tabs neuladen), wird in einem Kanal i
 Hier ggf. für das Bannen diese Erweiterungen deaktivieren, wenn man Probleme hat.
 
 ### Postion des BannHammer Menü
-Wem die Position des Menüs nicht gefällt, diese kann im Code angepasst werden
+Wem die Position des Menüs nicht gefällt, kann diese im Code angepasst werden:
 
 ```
         .raidhammer {
