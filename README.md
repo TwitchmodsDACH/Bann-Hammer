@@ -12,7 +12,7 @@ Unseren Mitglieder soll damit eine einfache Möglichkeit an die Hand geben werde
 ## Wesentliche Veränderungen zu [RaidHammer](https://github.com/victornpb/twitch-mass-ban)
 
 - CORS-Funktion eingebaut 
-- TwitchModsDach Bannlisten integriert
+- [TwitchModsDach Bannlisten](https://github.com/TwitchmodsDACH/Bannlisten) integriert
 - Unban-Funktion hinzugefügt
 - BannGrund-Funktion hinzugefügt
 - Update-Funktion hinzugefügt
