@@ -2,7 +2,7 @@
 // @name            TwitchModsDACH Bann-Hammer (by RaidHammer)
 // @description     A tool for moderating Twitch easier during hate raids
 // @namespace       https://github.com/TwitchmodsDACH/Bann-Hammer
-// @version         1.1.4.7
+// @version         1.1.4.8
 // @match           *://*.twitch.tv/*
 // @run-at          document-idle
 // @author          victornpb
@@ -19,6 +19,7 @@
 
 
 (function () {
+    const myVersion = "1.1.4.8"
     // This function is requried to disable CORS for the GitHub ban list repository
     // https://portswigger.net/web-security/cors
     // If you didn't require this ban lists you can disable this
@@ -36,12 +37,12 @@
     GM_setValue("corsDisable", corsDisable);
 
     // Globle required Variables
-    let queueList = new Set();
-    let ignoredList = new Set();
-    let bannedList = new Set();
-    const LOGPREFIX = '[RAIDHAMMER]';
+    var isPaused = false;
+    var queueList = new Set();
+    var ignoredList = new Set();
+    var bannedList = new Set();
+    const LOGPREFIX = "[RAIDHAMMER]";
     const delay = t => new Promise(r => setTimeout(r, t));
-
 
     // Frontend
     var html = /*html*/`
@@ -168,7 +169,7 @@
               <svg version="1.0" xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="5 5 1280 1280" style="color: #34ae0c;fill: currentcolor;align:center;">
                 <path d="M517 1c-16 3-28 10-41 22l-10 10 161 160 161 161 2-2c6-4 17-19 21-25 10-19 12-44 4-64-6-14-5-13-120-129L576 17c-8-7-18-12-27-15-8-1-25-2-32-1zM249 250 77 422l161 161 161 161 74-74 74-75 18 19 18 18-2 4c-4 6-4 14-1 20a28808 28808 0 0 0 589 621c4 2 6 3 13 3 6 0 8-1 13-3 6-4 79-77 82-83 4-9 4-21-2-29l-97-93-235-223-211-200c-51-47-73-68-76-69-6-3-13-3-19 0l-5 3-18-18-18-18 74-74 74-74-161-161L422 77 249 250zM23 476a75 75 0 0 0-10 95c4 6 219 222 231 232 8 7 16 11 26 14 6 2 10 2 22 2s14 0 22-2l14-6c5-4 20-16 24-21l2-2-161-161L32 466l-9 10z"/>
               </svg>
-              &nbsp;&nbsp;TwitchModsDACH Edition&nbsp;v1.1.4.7</a>
+              &nbsp;&nbsp;TwitchModsDACH Edition&nbsp;${myVersion}</a>
         </h5><br \>
 
         <span style="flex-grow: 1;"></span>
@@ -177,23 +178,23 @@
     <div id="import" class="import" style="display:none;">
         <textarea id="textfield" placeholder="Type one username per line"></textarea>
         <div style="text-align:right;">
-            <input type="text" id="banReason" style="width:420px" placeholder="Enter ban reason" />
-            <button class="importBtn">Add to list</button>
+            <input type="text" id="banReason" style="width:450px" placeholder="Enter ban reason" />
+            <button class="importBtn" title="Add use(s) to list">➕</button>
         </div>
         <div style="align:center">
-          <button class="mdgBtnTrolls" style="width:32%">Add mdg_hate_trolls</button>
-          <button class="mdgBtnViewerBots" style="width:33%">Add mdg_viewer_bots</button>
-          <button class="mdgBtnUnban" style="width:32%;color:#34ae0c">Add mdg_unban</button>
+          <button class="mdgBtnTrolls" style="width:32%" title="Import mdg_hate_trolls list">➕ mdg_hate_trolls</button>
+          <button class="mdgBtnViewerBots" style="width:33%" title="Import mdg_hate_trolls list">➕ mdg_viewer_bots</button>
+          <button class="mdgBtnUnban" style="width:32%;color:#34ae0c" title="Import mdg_unban list">➕ MDG_UNBAN</button>
         </div>
         <div style="align:center">
-          <button class="mdgBtnFlirtyMad" style="width:32%">Add mdg_flirty_mad </button>
-          <button class="mdgBtnFollowBot" style="width:33%">Add mdg_follow_bots</button>
-          <button class="tmdBtnUnban" style="width:32%;color:#34ae0c">Add TMD_unban</button>
+          <button class="mdgBtnFlirtyMad" style="width:32%" title="Import mdg_flirty_mad list">➕ mdg_flirty_mad </button>
+          <button class="mdgBtnFollowBot" style="width:33%" title="Import mdg_follow_bots list">➕ mdg_follow_bots</button>
+          <button class="tmdBtnUnban" style="width:32%;color:#34ae0c" title="Import TMD_unban list">➕ TMD_UNBAN</button>
         </div>
         <div style="align:center">
-          <button class="mdgBtnAdvertising" style="width:32%">Add mdg_advertising</button>
-          <button class="mdgBtnSpamBots" style="width:33%">Add mdg_spam_bots</button>
-          <button class="tmdBtnCrossban" style="width:32%">Add TMD_crossbans</button>
+          <button class="mdgBtnAdvertising" style="width:32%" title="Import mdg_advertising list">➕ mdg_advertising</button>
+          <button class="mdgBtnSpamBots" style="width:33%" title="Import mdg_spam_bots list">➕ mdg_spam_bots</button>
+          <button class="tmdBtnCrossban" style="width:32%" title="Import tmd_crossbans list">➕ tmd_crossbans</button>
         </div>
     </div>
     <div class="body">
@@ -201,10 +202,11 @@
         <div style="display: flex; margin: 5px;">
           <span style="flex-grow: 2;"></span>
           <div class="buttons">
-            <button class="back">Back</button>
-            <button class="unbanAll">Unban All</button>
-            <button class="ignoreAll">Ignore All</button>
-            <button class="banAll">Ban All</button>
+            <button class="back" title="go back">⬅</button>
+            <button class="pause" id="pause" title="Pause/Play">⏸</button>
+            <button class="ignoreAll" title="Remove all from list">❌ All</button>
+            <button class="unbanAll" title="Unban all from list">Unban All</button>
+            <button class="banAll" title="Ban all from list">Ban All</button>
           </div>
         </div>
     </div>
@@ -212,6 +214,20 @@
     <a href="https://github.com/TwitchmodsDACH/Bannlisten" target="_blank" style="color: #34ae0c;">TwitchModsDACH Bannlisten</a>&nbsp;-&nbsp;
     <a href="https://github.com/TwitchmodsDACH/Bann-Hammer/raw/main/bannhammer.user.js">Aktuellste Version installieren</a>
     </div>`;
+
+
+    function pauseBanAll() {
+       isPaused = !isPaused;
+       if (isPaused) {
+         var btn = document.getElementById("pause");
+         btn.value = 'pause';
+         btn.innerHTML = 'Pause';
+       } else {
+         var btn = document.getElementById("pause");
+         btn.value = 'unpause';
+         btn.innerHTML = 'Unpause';
+       }
+    }
 
     // modal
     const d = document.createElement("div");
@@ -287,6 +303,7 @@
     d.querySelector(".closeBtn").onclick = hide;
     d.querySelector(".unbanAll").onclick = unbanAll;
     d.querySelector(".back").onclick = toggleBack;
+    d.querySelector(".pause").onclick = togglePause;
     d.querySelector(".import button.mdgBtnUnban").onclick = importMDGUnban;
     d.querySelector(".import button.mdgBtnTrolls").onclick = importMDGtrolls;
     d.querySelector(".import button.mdgBtnViewerBots").onclick = importMDGViewerBots;
@@ -311,6 +328,22 @@
     });
 
     //Functions
+
+
+    function togglePause() {
+      if (isPaused) {
+        isPaused = false;
+        var btn = document.getElementById("pause");
+         btn.value = 'pause';
+         btn.innerHTML = '⏸';
+      } else {
+        isPaused = true;
+        var btn = document.getElementById("pause");
+         btn.value = 'play';
+         btn.innerHTML = '▶';
+      }
+    }
+
     function show() {
         console.log(LOGPREFIX, 'Show');
         d.style.display = '';
@@ -507,14 +540,26 @@
             ignoreItem(user);
       }
     }
-
-    async function banAll() {
+async function banAll() {
+  console.log(LOGPREFIX, 'Banning all...', queueList);
+  for (const user of queueList) {
+    if (isPaused) {
+      // Pause until pause button pressed again
+      while (isPaused) {
+        await delay(1000);
+      }
+    }
+    banItem(user);
+    await delay(125);
+  }
+}
+/*    async function banAll() {
       console.log(LOGPREFIX, 'Banning all...', queueList);
       for (const user of queueList) {
           banItem(user);
           await delay(125);
       }
-    }
+    } */
 
     async function unbanAll() {
       console.log(LOGPREFIX, 'Banning all...', queueList);
@@ -607,13 +652,14 @@
       d.querySelector(".ignoreAll").style.display = queueList.size ? '' : 'none';
       d.querySelector(".banAll").style.display = queueList.size ? '' : 'none';
       d.querySelector(".back").style.display = queueList.size ? '' : 'none';
+      d.querySelector(".pause").style.display = queueList.size ? '' : 'none';
       d.querySelector(".unbanAll").style.display = queueList.size ? '' : 'none';
       const renderItem = item => `
       <li>
-        <button class="accountage" data-user="${item}" title="Check account age">?</button>
-        <button class="ignore" data-user="${item}">Ignore</button>
-        <button class="ban" data-user="${item}">Ban</button>
-        <button class="unban" data-user="${item}">Unban</button>
+        <button class="accountage" data-user="${item}" title="send ''!accountage ${item}'' to chat">?</button>
+        <button class="ignore" data-user="${item}" title="remove from list">❌</button>
+        <button class="unban" data-user="${item}" title="unban user">Unban</button>
+        <button class="ban" data-user="${item}" title="ban user">Ban</button>
         <span>${item}</span>
       </li>`;
 
