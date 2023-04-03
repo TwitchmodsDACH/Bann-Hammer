@@ -18,10 +18,12 @@ Unseren Mitglieder soll damit eine einfache Möglichkeit an die Hand geben werde
 - Update-Funktion hinzugefügt
 - Re-design durchgeführt
 
+## Funktioniert ***nicht*** mit Safari
+Aktuell funktioniert der Bannhammer noch nicht unter Safari.
+
 ## Voraussetzungen
 
 Eine der folgenden Erweiterungen wird benötigt
-
 - Chrome: [Violentmonkey](https://chrome.google.com/webstore/detail/violent-monkey/jinjaccalgkegednnccohejagnlnfdag) or [Tampermonkey](https://chrome.google.com/webstore/detail/dhdgffkkebhmkfjojejmpbldmpobfkfo)
 - Firefox: [Greasemonkey](https://addons.mozilla.org/en-US/firefox/addon/greasemonkey/), [Tampermonkey](https://addons.mozilla.org/en-US/firefox/addon/tampermonkey/), or [Violentmonkey](https://addons.mozilla.org/firefox/addon/violentmonkey/)
 - Edge: [Tempermonkey](https://microsoftedge.microsoft.com/addons/detail/iikmkjmpaadaobahmlepeloendndfphd) or [Violentmonkey](https://microsoftedge.microsoft.com/addons/detail/eeagobfjdenkkddmbclomhiblgggliao)
@@ -82,6 +84,28 @@ Wem die Position des Menüs nicht gefällt, kann diese im Code angepasst werden:
             padding: 5px;
             min-width: 500px;
       }
+```
+
+### Das Tool läuft eine Weile, dann kommt ein Fehler auf der Website von Twitch
+Dann ist vermutlich für euer Setup die Geschwindigkeit zu hoch für die MassenBann/MassenUnbann funktionen.
+Das könnt ihr an diesen beiden Stellen anpassen:
+
+```
+    async function banAll() {
+      console.log(LOGPREFIX, 'Banning all...', queueList);
+      for (const user of queueList) {
+          banItem(user);
+          await delay(125); <<<<<< Hier in kleinen 10er Schritter bis 200 gehen
+      }
+    }
+
+    async function unbanAll() {
+      console.log(LOGPREFIX, 'Banning all...', queueList);
+      for (const user of queueList) {
+          unbanItem(user);
+          await delay(125); <<<<<< Hier in kleinen 10er Schritter bis 200 gehen
+      }
+    }
 ```
 
 ## Support
