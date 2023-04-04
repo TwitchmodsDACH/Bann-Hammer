@@ -2,7 +2,7 @@
 // @name            TwitchModsDACH Bann-Hammer (by RaidHammer)
 // @description     A tool for moderating Twitch easier during hate raids
 // @namespace       https://github.com/TwitchmodsDACH/Bann-Hammer
-// @version         1.1.4.8
+// @version         1.1.4.9
 // @match           *://*.twitch.tv/*
 // @run-at          document-idle
 // @author          victornpb
@@ -19,7 +19,7 @@
 
 
 (function () {
-    const myVersion = "1.1.4.8"
+    const myVersion = "1.1.4.9"
     // This function is requried to disable CORS for the GitHub ban list repository
     // https://portswigger.net/web-security/cors
     // If you didn't require this ban lists you can disable this
@@ -34,7 +34,13 @@
         "value": "https://raw.githubusercontent.com/TwitchmodsDACH/Bannlisten/main/*"
       }]
     };
-    GM_setValue("corsDisable", corsDisable);
+
+    if (typeof GM_setValue === "function") {
+      GM_setValue("corsDisable", corsDisable);
+    } else {
+      // Fallback for Safari
+      localStorage.setItem("corsDisable", JSON.stringify(corsDisable));
+    }
 
     // Globle required Variables
     var isPaused = false;
@@ -44,21 +50,23 @@
     const LOGPREFIX = "[RAIDHAMMER]";
     const delay = t => new Promise(r => setTimeout(r, t));
 
+
     // Frontend
     var html = /*html*/`
+
     <div id="raidhammer" class="raidhammer">
     <style>
         .raidhammer {
             position: fixed;
             bottom: 10px;
-            right: 800px;
+            right: 400px;
             z-index: 99999999;
             background-color: var(--color-background-base);
             color: var(--color-text-base);
             border: var(--border-width-default) solid var(--color-border-base);
             box-shadow: var(--shadow-elevation-2);
             padding: 5px;
-            min-width: 500px;
+            min-width: 350px;
         }
 
         .raidhammer .greenhammer {
@@ -161,6 +169,7 @@
         }
 
     </style>
+
     <div class="header">
         <span style="flex-grow: 1;"></span>
         <h5 class="logo">
@@ -213,9 +222,9 @@
     <div class="footer">
     <a href="https://github.com/TwitchmodsDACH/Bannlisten" target="_blank" style="color: #34ae0c;">TwitchModsDACH Bannlisten</a>&nbsp;-&nbsp;
     <a href="https://github.com/TwitchmodsDACH/Bann-Hammer/raw/main/bannhammer.user.js">Aktuellste Version installieren</a>
-    </div>`;
+      </div>`;
 
-
+    // PauseButton
     function pauseBanAll() {
        isPaused = !isPaused;
        if (isPaused) {
@@ -447,7 +456,7 @@
             textarea.value = '';
             insertText(Array.from(queueList))
             if (queueList.size != "0") { toggleImport(); renderList(); }
-        });
+          });
     }
 
     function importMDGFlirtyMad() {
@@ -540,32 +549,31 @@
             ignoreItem(user);
       }
     }
-async function banAll() {
-  console.log(LOGPREFIX, 'Banning all...', queueList);
-  for (const user of queueList) {
-    if (isPaused) {
-      // Pause until pause button pressed again
-      while (isPaused) {
-        await delay(1000);
-      }
-    }
-    banItem(user);
-    await delay(125);
-  }
-}
-/*    async function banAll() {
+    async function banAll() {
       console.log(LOGPREFIX, 'Banning all...', queueList);
       for (const user of queueList) {
-          banItem(user);
-          await delay(125);
+        if (isPaused) {
+          // breake until button pressed again
+          while (isPaused) {
+          await delay(1000);
+        }
       }
-    } */
+      banItem(user);
+      await delay(125);
+      }
+    }
 
     async function unbanAll() {
       console.log(LOGPREFIX, 'Banning all...', queueList);
       for (const user of queueList) {
-          unbanItem(user);
-          await delay(125);
+        if (isPaused) {
+          // breake until button pressed again
+          while (isPaused) {
+          await delay(1000);
+        }
+      }
+      unbanItem(user);
+      await delay(125);
       }
     }
 
@@ -665,7 +673,7 @@ async function banAll() {
 
       let inner = queueList.size ? [...queueList].map(user => renderItem(user)).join('') : `
         <div class="empty">
-          <img class="toggleImport" src="https://cdn.discordapp.com/attachments/928731319846965311/1088410170327056394/twitchmods_dach_logo_v2.png"  alt="Start RaidHammer" width="370px" style="cursor: pointer;">
+          <img class="toggleImport" src="https://github.com/TwitchmodsDACH/Bann-Hammer/raw/main/logo.png" title="Start RaidHammer" width="370px" style="cursor: pointer;">
         </div>`;
         d.querySelector('.list').innerHTML = `
         <ul>
