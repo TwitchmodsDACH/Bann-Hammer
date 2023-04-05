@@ -1,8 +1,8 @@
 // ==UserScript==
-// @name            TwitchModsDACH Bann-Hammer Lady Edition (by RaidHammer)
+// @name            TwitchModsDACH Bann-Hammer (by RaidHammer)
 // @description     A tool for moderating Twitch easier during hate raids
 // @namespace       https://github.com/TwitchmodsDACH/Bann-Hammer
-// @version         1.1.4.12
+// @version         1.1.4.13
 // @match           *://*.twitch.tv/*
 // @run-at          document-idle
 // @author          victornpb
@@ -19,7 +19,7 @@
 
 
 (function () {
-    const myVersion = "1.1.4.12"
+    const myVersion = "1.1.4.13"
     // This function is requried to disable CORS for the GitHub ban list repository
     // https://portswigger.net/web-security/cors
     // If you didn't require this ban lists you can disable this
