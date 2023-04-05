@@ -2,7 +2,7 @@
 // @name            TwitchModsDACH Bann-Hammer (by RaidHammer)
 // @description     A tool for moderating Twitch easier during hate raids
 // @namespace       https://github.com/TwitchmodsDACH/Bann-Hammer
-// @version         1.1.4.19
+// @version         1.1.4.20
 // @match           *://*.twitch.tv/*
 // @run-at          document-idle
 // @author          TwitchModsDACH (sofa) original code is from victornpb
@@ -24,7 +24,7 @@
     var text;
     var myVersion;
     var newVersion;
-    myVersion = "1.1.4.19"
+    myVersion = "1.1.4.20"
     var replaceFooter = "none"
     var isPaused = false;
     var queueList = new Set();
