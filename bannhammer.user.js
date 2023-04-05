@@ -2,7 +2,7 @@
 // @name            TwitchModsDACH Bann-Hammer (by RaidHammer)
 // @description     A tool for moderating Twitch easier during hate raids
 // @namespace       https://github.com/TwitchmodsDACH/Bann-Hammer
-// @version         1.1.5
+// @version         1.1.5.1
 // @match           *://*.twitch.tv/*
 // @run-at          document-idle
 // @author          TwitchModsDACH (sofa) original code is from victornpb
@@ -24,7 +24,7 @@
     var text;
     var myVersion;
     var newVersion;
-    myVersion = "1.1.5"
+    myVersion = "1.1.5.1"
     var replaceFooter = "none"
     var isPaused = false;
     var queueList = new Set();
@@ -506,7 +506,7 @@
         fetch("https://raw.githubusercontent.com/TwitchmodsDACH/Bann-Hammer/main/bannhammer.user.js")
           .then((response) => response.text())
           .then((text) => {
-            var regex = /@version\s+(\d+\.\d+\.\d+\.\d+)/;
+            var regex = /@version\s+(\d.*)/;
             var match = regex.exec(text);
             var newVersion = match[1];
             console.log("erster", myVersion, newVersion)
@@ -560,7 +560,12 @@
         const textarea = d.querySelector(".import textarea");
         const lines = textarea.value.split(/\n/).map(line => line.trim()).filter(Boolean);
         for (const line of lines) {
-            if (/^[\w_]+$/.test(line)) queueList.add(line);
+          if (/^[\w_]+$/.test(line)) {
+            if (!(bannedUsersStore.includes(line))) {
+              queueList.add(line);
+            } else {
+              console.log("User already banned in channel:", line)
+            }
         }
         textarea.value = '';
         toggleImport();
@@ -774,9 +779,10 @@
       console.log(LOGPREFIX, 'Ban user', user);
       queueList.delete(user);
       bannedList.add(user);
+      bannedUsersStore.add(user)
       sendMessage('/ban ' + user + ' ' + banReason );
       renderList();
-     }
+    }
 
     function sendMessage(msg) {
       try{
