@@ -2,7 +2,7 @@
 // @name            TwitchModsDACH Bann-Hammer (by RaidHammer)
 // @description     A tool for moderating Twitch easier during hate raids
 // @namespace       https://github.com/TwitchmodsDACH/Bann-Hammer
-// @version         1.1.4.21
+// @version         1.1.4.22
 // @match           *://*.twitch.tv/*
 // @run-at          document-idle
 // @author          TwitchModsDACH (sofa) original code is from victornpb
@@ -24,7 +24,7 @@
     var text;
     var myVersion;
     var newVersion;
-    myVersion = "1.1.4.21"
+    myVersion = "1.1.4.22"
     var replaceFooter = "none"
     var isPaused = false;
     var queueList = new Set();
@@ -382,7 +382,7 @@
           dataHeader = dataHeader.replace(/#34AE0C/g, themePrincess);
           dataFooter = dataFooter.replace(/#34AE0C/g, themePrincess);
           dataHammer = dataHammer.replace(/#34AE0C/g, themePrincess);
-          dataLogo = dataLogo.replace(/https:\/\/github\.com\/TwitchmodsDACH\/Bann-Hammer\/blob\/main\/logo\.png\?raw\=true/gi, "https://github.com/TwitchmodsDACH/Bann-Hammer/blob/main/dokumentation/fee.gif");
+          dataLogo = dataLogo.replace(/https:\/\/github\.com\/TwitchmodsDACH\/Bann-Hammer\/blob\/main\/logo\.png\?raw\=true/gi, "https://github.com/TwitchmodsDACH/Bann-Hammer/blob/raw/dokumentation/fee.gif");
           document.getElementById('header').innerHTML = dataHeader;
           document.getElementById('footer').innerHTML = dataFooter;
           document.getElementById('hammer').innerHTML = dataHammer;
@@ -463,7 +463,7 @@
           dataHeader = dataHeader.replace(/#FF1493/g, themeNormal);
           dataFooter = dataFooter.replace(/#FF1493/g, themeNormal);
           dataHammer = dataHammer.replace(/#FF1493/g, themeNormal);
-          dataLogo = dataLogo.replace(/https:\/\/github.com\/TwitchmodsDACH\/Bann-Hammer\/blob\/main\/dokumentation\/fee.gif/gi, "https://github.com/TwitchmodsDACH/Bann-Hammer/blob/main/logo.png?raw=true")
+          dataLogo = dataLogo.replace(/https:\/\/github.com\/TwitchmodsDACH\/Bann-Hammer\/blob\/raw\/dokumentation\/fee.gif/gi, "https://github.com/TwitchmodsDACH/Bann-Hammer/blob/main/logo.png?raw=true")
           document.getElementById('header').innerHTML = dataHeader;
           document.getElementById('footer').innerHTML = dataFooter;
           document.getElementById('hammer').innerHTML = dataHammer;
