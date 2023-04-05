@@ -2,7 +2,7 @@
 // @name            TwitchModsDACH Bann-Hammer (by RaidHammer)
 // @description     A tool for moderating Twitch easier during hate raids
 // @namespace       https://github.com/TwitchmodsDACH/Bann-Hammer
-// @version         1.1.4.17
+// @version         1.1.4.18
 // @match           *://*.twitch.tv/*
 // @run-at          document-idle
 // @author          TwitchModsDACH (sofa) original code is from victornpb
@@ -22,8 +22,8 @@
 (function () {
     // Globle required Variables
     var myVersion;
-    var version;
-    myVersion = "1.1.4.17"
+    var newVersion;
+    myVersion = "1.1.4.18"
     var replaceFooter = "none"
     var isPaused = false;
     var queueList = new Set();
@@ -256,20 +256,6 @@
     <a href="https://github.com/TwitchmodsDACH/Bannlisten" target="_blank" style="color: ${themeTextColor};" id="replaceFooter" titel="Zur Bannliste">TwitchModsDACH Bannlisten</a>&nbsp;-&nbsp;
     <a id="manoooo" href="https://github.com/TwitchmodsDACH/Bann-Hammer/raw/main/bannhammer.user.js" title="Aktuelle Bannhammer Version installieren">${updateText}</a>&nbsp;-&nbsp;&nbsp;${myVersion}
     </div>`;
-
-    function checkVersion() {
-      fetch("https://raw.githubusercontent.com/TwitchmodsDACH/Bann-Hammer/main/bannhammer.user.js")
-        .then((response) => response.text())
-        .then((text) => {
-          var regex = /@version\s+(\d+\.\d+\.\d+\.\d+)/;
-          var match = regex.exec(text);
-          var version = match[1];
-        console.log("erster", myVersion, version)
-        });
-      if ( myVersion !== version) {
-        document.getElementById('manoooo').innerHTML = "🚨 Update verfügbar 🚨"
-      }
-    }
 
     // PauseButton
     function pauseBanAll() {
@@ -513,10 +499,24 @@
         d.style.display = 'none';
     }
 
+
     function toggle() {
-        if (d.style.display !== 'none') hide();
+      function checkVersion() {
+        fetch("https://raw.githubusercontent.com/TwitchmodsDACH/Bann-Hammer/main/bannhammer.user.js")
+          .then((response) => response.text())
+          .then((text) => {
+            var regex = /@version\s+(\d+\.\d+\.\d+\.\d+)/;
+            var match = regex.exec(text);
+            var newVersion = match[1];
+            console.log("erster", myVersion, newVersion)
+            if ( myVersion != newVersion) {
+            document.getElementById('manoooo').innerHTML = "🚨 Update verfügbar 🚨"
+            }
+          });
+      }
+      if (d.style.display !== 'none') hide();
         else show();
-        checkVersion()
+        checkVersion();
     }
 
     function toggleImport() {
@@ -850,3 +850,4 @@
         </ul>`;
     }
 })();
+
