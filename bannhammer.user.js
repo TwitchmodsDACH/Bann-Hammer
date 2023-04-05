@@ -2,10 +2,10 @@
 // @name            TwitchModsDACH Bann-Hammer (by RaidHammer)
 // @description     A tool for moderating Twitch easier during hate raids
 // @namespace       https://github.com/TwitchmodsDACH/Bann-Hammer
-// @version         1.1.4.13
+// @version         1.1.4.15
 // @match           *://*.twitch.tv/*
 // @run-at          document-idle
-// @author          victornpb
+// @author          TwitchModsDACH (sofa) original code is from victornpb
 // @homepageURL     https://github.com/TwitchmodsDACH/Bann-Hammer
 // @supportURL      https://github.com/TwitchmodsDACH/Bann-Hammer
 // @contributionURL https://github.com/TwitchmodsDACH/Bann-Hammer
@@ -15,23 +15,41 @@
 // @license         MIT
 // ==/UserScript==
 
+
 /* jshint esversion: 8 */
 
 
 (function () {
-    const myVersion = "1.1.4.13"
+    // Globle required Variables
+    var myVersion;
+    var version;
+    myVersion = "1.1.4.15"
+    var replaceFooter = "none"
+    var isPaused = false;
+    var queueList = new Set();
+    var ignoredList = new Set();
+    var bannedList = new Set();
+    const LOGPREFIX = "[BANN-DHAMMER]";
+    const delay = t => new Promise(r => setTimeout(r, t));
+    const urlParts = document.location.href.split("/");
+    const activeChannel = urlParts[urlParts.length - 1];
+    var themePrincess = "#FF1493"
+    var themeNormal = "#34AE0C"
+    var themeTextColor = themeNormal
+    var updateText = "keine neue Version verfügbar"
+
     // This function is requried to disable CORS for the GitHub ban list repository
     // https://portswigger.net/web-security/cors
-    // If you didn't require this ban lists you can disable this
+    // If you didn't require this ban lists you can disable this   https://raw.githubusercontent.com/TwitchmodsDACH/Bannlisten/main/
     var corsDisable = {
       "id": 1,
       "enabled": true,
       "name": "Allow All",
-      "match": "https://raw.githubusercontent.com/TwitchmodsDACH/Bannlisten/main/*",
+      "match": "<all_urls>",
       "action": "allow",
       "responseHeaders": [{
         "name": "Access-Control-Allow-Origin",
-        "value": "https://raw.githubusercontent.com/TwitchmodsDACH/Bannlisten/main/*"
+        "value": "*"
       }]
     };
 
@@ -49,26 +67,29 @@
         document.head.appendChild(style);
         }
     }
+    if (typeof GM_setValue === "function") {
+      GM_setValue("corsDisable", JSON.stringify(corsDisable));
+    } else if (typeof localStorage !== "undefined") {
+      localStorage.setItem("corsDisable", JSON.stringify(corsDisable));
 
+    }
 
+    function checkVersion() {
+      fetch("https://raw.githubusercontent.com/TwitchmodsDACH/Bann-Hammer/main/bannhammer.user.js")
+        .then((response) => response.text())
+        .then((text) => {
+          var regex = /@version\s+(\d+\.\d+\.\d+\.\d+)/;
+          var match = regex.exec(text);
+          var version = match[1];
+        });
+      if ( myVersion !== version) {
+        updateText = "🚨 Update verfügbar 🚨"
+      }
+    }
+    checkVersion()
 
-    // Globle required Variables
-    var replaceFooter = "none"
-    var isPaused = false;
-    var queueList = new Set();
-    var ignoredList = new Set();
-    var bannedList = new Set();
-    const LOGPREFIX = "[BANN-DHAMMER]";
-    const delay = t => new Promise(r => setTimeout(r, t));
-
-    const urlParts = document.location.href.split("/");
-    const activeChannel = urlParts[urlParts.length - 1];
-    var themePrincess = "#FF1493"
-    var themeNormal = "#34AE0C"
-    var themeTextColor = themeNormal
     // Frontend
     var html = /*html*/`
-
     <div id="raidhammer" class="raidhammer">
     <style>
         .raidhammer {
@@ -230,9 +251,9 @@
           <span style="flex-grow: 2;"></span>
           <div id="buttons" class="buttons">
             <button class="back" title="Zurück">⬅</button>
-            <button class="sElements" title="Öffnet ComanderRoot" onclick="window.open('https://twitch-tools.rootonline.de','_blank')">🤖</button>
-            <button class="sElements" title="Öffnet Streamlabs" onclick="window.open('https://streamlabs.com/dashboard','_blank')"><img height="20px" width="20px" src="https://cdn.streamlabs.com/static/imgs/streamlabs-logos/app-icon/streamlabs-app-icon.png"></button>
-            <button class="sElements" title="Öffnet Streamelements" onclick="window.open('https://streamelements.com/dashboard','_blank')"><img src="https://avatars.githubusercontent.com/u/16977512?s=20&v=4"></button>
+            <button class="comanderRoot" title="Öffnet ComanderRoot" onclick="window.open('https://twitch-tools.rootonline.de','_blank')">🤖</button>
+            <button class="sLabs" title="Öffnet Streamlabs" onclick="window.open('https://streamlabs.com/dashboard','_blank')"><img src="https://cdn.streamlabs.com/static/imgs/streamlabs-logos/app-icon/streamlabs-app-icon.png" height="17px" style = "position:relative; top:2px;"></button>
+            <button class="sElements" title="Öffnet Streamelements" onclick="window.open('https://streamelements.com/dashboard','_blank')"><img src="https://avatars.githubusercontent.com/u/16977512?s=17&v=4" style="position:relative; top:2px;"></button>
             <button class="chatstats" title="Öffnet SullyGnome Kanal-Statistiken für den aktuellen Kanal" onclick="window.open('https://sullygnome.com/channel/${activeChannel}','_blank')">📈</button>
             <button class="modLogger" title="Öffnet ModLogger für den aktuellen Kanal" onclick="window.open('https://jvpeek.github.io/twitchmodlogger/?channel=${activeChannel}','_blank')">🗄</button>
             <button class="chatDeepStats" title="Öffnet ChatStats für den aktuellen Kanal" onclick="window.open('https://echtkpvl.github.io/echt-twitch/chat-stats.html?channel=${activeChannel}','_blank')">🩻</button>
@@ -245,8 +266,10 @@
     </div>
     <div id="footer" class="footer">
     <a href="https://github.com/TwitchmodsDACH/Bannlisten" target="_blank" style="color: ${themeTextColor};" id="replaceFooter" titel="Zur Bannliste">TwitchModsDACH Bannlisten</a>&nbsp;-&nbsp;
-    <a href="https://github.com/TwitchmodsDACH/Bann-Hammer/raw/main/bannhammer.user.js" title="Aktuelle Bannhammer Version installieren">Update</a>&nbsp;-&nbsp;&nbsp;${myVersion}
+    <a id="version" href="https://github.com/TwitchmodsDACH/Bann-Hammer/raw/main/bannhammer.user.js" title="Aktuelle Bannhammer Version installieren">${updateText}</a>&nbsp;-&nbsp;&nbsp;${myVersion}
     </div>`;
+
+
 
     // PauseButton
     function pauseBanAll() {
@@ -367,48 +390,102 @@
         var dataFooter = document.getElementById('footer').innerHTML;
         var dataHammer = document.getElementById('hammer').innerHTML;
         var dataLogo = document.getElementById('empty').innerHTML;
-        console.log(dataLogo)
         if (dataHeader.match("#34AE0C") && dataFooter.match("#34AE0C") && dataHammer.match("#34AE0C")) {
           console.log("huh? I'm princess now!")
           dataHeader = dataHeader.replace(/#34AE0C/g, themePrincess);
           dataFooter = dataFooter.replace(/#34AE0C/g, themePrincess);
           dataHammer = dataHammer.replace(/#34AE0C/g, themePrincess);
-          dataLogo = dataLogo.replace(/https:\/\/github.com\/TwitchmodsDACH\/Bann-Hammer\/blob\/main\/logo\.png\?raw\=true/gi, "https://i.pinimg.com/originals/1a/0c/75/1a0c75709e3f71a0018eabfefccc840c.gif");
+          dataLogo = dataLogo.replace(/https:\/\/github\.com\/TwitchmodsDACH\/Bann-Hammer\/blob\/main\/logo\.png\?raw\=true/gi, "https://thumbs.gfycat.com/NegativeHalfDwarfmongoose-size_restricted.gif");
           document.getElementById('header').innerHTML = dataHeader;
           document.getElementById('footer').innerHTML = dataFooter;
           document.getElementById('hammer').innerHTML = dataHammer;
           document.getElementById('empty').innerHTML = dataLogo;
-          console.log(dataLogo)
+          const canvas = document.createElement("canvas");
+          canvas.style.position = "fixed";
+          canvas.style.top = "0";
+          canvas.style.left = "0";
+          canvas.style.width = "100%";
+          canvas.style.height = "100%";
+          canvas.style.zIndex = "-1";
+
+          // Das Canvas auf eine höhere Auflösung skalieren
+          canvas.width = window.innerWidth * window.devicePixelRatio * 2;
+          canvas.height = window.innerHeight * window.devicePixelRatio * 2;
+
+          // Das Canvas auf die Bildschirmgröße skalieren
+          canvas.style.width = window.innerWidth + "px";
+          canvas.style.height = window.innerHeight + "px";
+
+          const targetElement = document.getElementById("raidhammer");
+          targetElement.appendChild(canvas);
+
+          const context = canvas.getContext("2d");
+          context.scale(window.devicePixelRatio, window.devicePixelRatio);
+
+          function drawStars(twinkleSpeed) {
+            const centerX = canvas.width / 2;
+            const centerY = canvas.height / 2;
+            const radius = 3;
+            const numStars = 350;
+
+            context.clearRect(0, 0, canvas.width, canvas.height);
+
+            for (let i = 0; i < numStars; i++) {
+              const x = Math.random() * canvas.width;
+              const y = Math.random() * canvas.height;
+              const starRadius = Math.random() * radius;
+
+              // Sterne zeichnen
+              const gradient = context.createRadialGradient(x, y, 0, x, y, starRadius);
+              gradient.addColorStop(0, "#fff");
+              gradient.addColorStop(1, "transparent");
+              context.beginPath();
+              context.arc(x, y, starRadius, 0, Math.PI * 2);
+              context.fillStyle = gradient;
+              context.fill();
+
+              // Funkeln hinzufügen
+              const twinkleX = Math.random() * canvas.width;
+              const twinkleY = Math.random() * canvas.height;
+              const twinkleRadius = Math.random() * starRadius;
+
+              const twinkleGradient = context.createRadialGradient(
+                twinkleX,
+                twinkleY,
+                0,
+                twinkleX,
+                twinkleY,
+                twinkleRadius
+              );
+              twinkleGradient.addColorStop(0, `rgba(255, 255, 255, ${Math.abs(Math.sin(twinkleSpeed))})`);
+              twinkleGradient.addColorStop(1, "transparent");
+
+              context.beginPath();
+              context.arc(twinkleX, twinkleY, twinkleRadius, 0, Math.PI * 2);
+              context.fillStyle = twinkleGradient;
+              context.fill();
+            }
+            setTimeout(() => {
+              requestAnimationFrame(() => drawStars(twinkleSpeed));
+            }, twinkleSpeed);
+          }
+
+          drawStars(200);
         } else {
           console.log("Muh? I'm no longer a princess anymore")
           dataHeader = dataHeader.replace(/#FF1493/g, themeNormal);
           dataFooter = dataFooter.replace(/#FF1493/g, themeNormal);
           dataHammer = dataHammer.replace(/#FF1493/g, themeNormal);
-          dataLogo = dataLogo.replace(/https:\/\/i.pinimg.com\/originals\/1a\/0c\/75\/1a0c75709e3f71a0018eabfefccc840c\.gif/gi, "https://github.com/TwitchmodsDACH/Bann-Hammer/blob/main/logo.png?raw=true")
+          dataLogo = dataLogo.replace(/https:\/\/thumbs\.gfycat\.com\/NegativeHalfDwarfmongoose-size_restricted.gif"/gi, "https://github.com/TwitchmodsDACH/Bann-Hammer/blob/main/logo.png?raw=true")
           document.getElementById('header').innerHTML = dataHeader;
           document.getElementById('footer').innerHTML = dataFooter;
           document.getElementById('hammer').innerHTML = dataHammer;
           document.getElementById('empty').innerHTML = dataLogo;
-          console.log(dataLogo)
+          const canvas = document.createElement("canvas");
+          const targetElement = document.getElementById("body");
+          targetElement.removeChild(canvas);
         }
     }
-  /*      var dataHeader = ""
-        var dataFooter = ""
-        dataHeader = document.getElementById('header').innerHTML;
-        dataFooter = document.getElementById('footer').innerHTML;
-        dataHeader = dataHeader.replace(/#34ae0c/gi, themePrincess);
-        dataFooter = dataFooter.replace(/#34ae0c/gi, themePrincess);
-        document.getElementById('header').innerHTML = dataHeader;
-        document.getElementById('footer').innerHTML = dataFooter;
-        */
-/*      var dataHeader = ""
-        var dataFooter = ""
-        dataHeader = document.getElementById('header').innerHTML;
-        dataFooter = document.getElementById('footer').innerHTML;
-        dataHeader = dataHeader.replace(/#FF1493/gi, themeNormal);
-        dataFooter = dataFooter.replace(/#FF1493/gi, themeNormal);
-        document.getElementById('header').innerHTML = dataHeader;
-        document.getElementById('footer').innerHTML = dataFooter;*/
 
     function togglePause() {
       if (isPaused) {
@@ -764,7 +841,7 @@
 
       let inner = queueList.size ? [...queueList].map(user => renderItem(user)).join('') : `
         <div id="empty" class="empty">
-          <img class="toggleImport" src="https://github.com/TwitchmodsDACH/Bann-Hammer/blob/main/logo.png?raw=true" title="Start Bann-Hammer" width="370px" style="cursor: pointer;">
+          <img class="toggleImport" src="https://github.com/TwitchmodsDACH/Bann-Hammer/blob/main/logo.png?raw=true" title="Start Bann-Hammer" width="370px" style="cursor: pointer; max-height: 80px; min-height: 80px">
         </div>`;
         d.querySelector('.list').innerHTML = `
         <ul>
@@ -772,5 +849,6 @@
         </ul>`;
     }
 })();
+
 
 
