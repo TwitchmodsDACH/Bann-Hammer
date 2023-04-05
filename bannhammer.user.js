@@ -1,8 +1,8 @@
 // ==UserScript==
-// @name            TwitchModsDACH Bann-Hammer (by RaidHammer)
+// @name            TwitchModsDACH Bann-Hammer Lady Edition (by RaidHammer)
 // @description     A tool for moderating Twitch easier during hate raids
 // @namespace       https://github.com/TwitchmodsDACH/Bann-Hammer
-// @version         1.1.4.11
+// @version         1.1.4.12
 // @match           *://*.twitch.tv/*
 // @run-at          document-idle
 // @author          victornpb
@@ -19,7 +19,7 @@
 
 
 (function () {
-    const myVersion = "1.1.4.11"
+    const myVersion = "1.1.4.12"
     // This function is requried to disable CORS for the GitHub ban list repository
     // https://portswigger.net/web-security/cors
     // If you didn't require this ban lists you can disable this
@@ -42,6 +42,16 @@
       localStorage.setItem("corsDisable", JSON.stringify(corsDisable));
     }
 
+    if (typeof GM_addStyle == 'undefined') {
+      GM_addStyle = (css) => {
+        const style = document.createElement('style');
+        style.textContent = css;
+        document.head.appendChild(style);
+        }
+    }
+
+
+
     // Globle required Variables
     var replaceFooter = "none"
     var isPaused = false;
@@ -53,7 +63,9 @@
 
     const urlParts = document.location.href.split("/");
     const activeChannel = urlParts[urlParts.length - 1];
-
+    var themePrincess = "#FF1493"
+    var themeNormal = "#34AE0C"
+    var themeTextColor = themeNormal
     // Frontend
     var html = /*html*/`
 
@@ -72,8 +84,8 @@
             min-width: 500px;
         }
 
-        .raidhammer .greenhammer {
-            color: "#34ae0c"
+        .raidhammer .svg {
+            color: "${themeTextColor}"
         }
 
         .raidhammer .header {
@@ -174,15 +186,18 @@
     </style>
 
     <div class="header">
-        <span style="flex-grow: 1;"></span>
-        <h5 class="logo">
+        <span style="flex-grow: -1;"></span>
+        <button class="princess"><img src="https://raw.githubusercontent.com/TwitchmodsDACH/Bann-Hammer/main/dokumentation/magicwand.png"  title="Für die Prinzessinnen unter uns" width="20px" height="20px"></button>
 
-            <a href="https://github.com/TwitchmodsDACH/Bann-Hammer" target="_blank" style="color: #34ae0c;" titel="Zum Bann-Hammer Repository">Bann-Hammer&nbsp;&nbsp;
-              <svg version="1.0" xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="5 5 1280 1280" style="color: #34ae0c;fill: currentcolor;align:center;">
+        <span style="flex-grow: 1;"></span>
+        <h5 id="header" class="logo">
+
+            <a href="https://github.com/TwitchmodsDACH/Bann-Hammer" target="_blank" style="color: ${themeTextColor};" titel="Zum Bann-Hammer Repository">Bann-Hammer&nbsp;&nbsp;
+              <svg version="1.0" xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="5 5 1280 1280" style="color: ${themeTextColor};fill: currentcolor;align:center;">
                 <path d="M517 1c-16 3-28 10-41 22l-10 10 161 160 161 161 2-2c6-4 17-19 21-25 10-19 12-44 4-64-6-14-5-13-120-129L576 17c-8-7-18-12-27-15-8-1-25-2-32-1zM249 250 77 422l161 161 161 161 74-74 74-75 18 19 18 18-2 4c-4 6-4 14-1 20a28808 28808 0 0 0 589 621c4 2 6 3 13 3 6 0 8-1 13-3 6-4 79-77 82-83 4-9 4-21-2-29l-97-93-235-223-211-200c-51-47-73-68-76-69-6-3-13-3-19 0l-5 3-18-18-18-18 74-74 74-74-161-161L422 77 249 250zM23 476a75 75 0 0 0-10 95c4 6 219 222 231 232 8 7 16 11 26 14 6 2 10 2 22 2s14 0 22-2l14-6c5-4 20-16 24-21l2-2-161-161L32 466l-9 10z"/>
               </svg>
               &nbsp;&nbsp;TwitchModsDACH Edition</a>
-        </h5><br \>
+        </h5><br>
 
         <span style="flex-grow: 1;"></span>
         <button class="closeBtn">_</button>
@@ -213,7 +228,7 @@
         <div class="list"></div>
         <div style="display: flex; margin: 5px;">
           <span style="flex-grow: 2;"></span>
-          <div class="buttons">
+          <div id="buttons" class="buttons">
             <button class="back" title="Zurück">⬅</button>
             <button class="sElements" title="Öffnet ComanderRoot" onclick="window.open('https://twitch-tools.rootonline.de','_blank')">🤖</button>
             <button class="sElements" title="Öffnet Streamlabs" onclick="window.open('https://streamlabs.com/dashboard','_blank')"><img height="20px" width="20px" src="https://cdn.streamlabs.com/static/imgs/streamlabs-logos/app-icon/streamlabs-app-icon.png"></button>
@@ -228,8 +243,8 @@
           </div>
         </div>
     </div>
-    <div class="footer">
-    <a href="https://github.com/TwitchmodsDACH/Bannlisten" target="_blank" style="color: #34ae0c;" id="replaceFooter" titel="Zur Bannliste">TwitchModsDACH Bannlisten</a>&nbsp;-&nbsp;
+    <div id="footer" class="footer">
+    <a href="https://github.com/TwitchmodsDACH/Bannlisten" target="_blank" style="color: ${themeTextColor};" id="replaceFooter" titel="Zur Bannliste">TwitchModsDACH Bannlisten</a>&nbsp;-&nbsp;
     <a href="https://github.com/TwitchmodsDACH/Bann-Hammer/raw/main/bannhammer.user.js" title="Aktuelle Bannhammer Version installieren">Update</a>&nbsp;-&nbsp;&nbsp;${myVersion}
     </div>`;
 
@@ -256,7 +271,7 @@
     // activation button
     const activateBtn = document.createElement('button');
     activateBtn.innerHTML = `
-      <svg version="1.0" xmlns="http://www.w3.org/2000/svg" width="25" height="25" viewBox="0 0 1280 1280" style="color: #34ae0c; fill: currentcolor;">
+      <svg version="1.0" xmlns="http://www.w3.org/2000/svg" width="25" height="25" viewBox="0 0 1280 1280" style="color: ${themeTextColor}; fill: currentcolor;">
         <path d="M517 1c-16 3-28 10-41 22l-10 10 161 160 161 161 2-2c6-4 17-19 21-25 10-19 12-44 4-64-6-14-5-13-120-129L576 17c-8-7-18-12-27-15-8-1-25-2-32-1zM249 250 77 422l161 161 161 161 74-74 74-75 18 19 18 18-2 4c-4 6-4 14-1 20a28808 28808 0 0 0 589 621c4 2 6 3 13 3 6 0 8-1 13-3 6-4 79-77 82-83 4-9 4-21-2-29l-97-93-235-223-211-200c-51-47-73-68-76-69-6-3-13-3-19 0l-5 3-18-18-18-18 74-74 74-74-161-161L422 77 249 250zM23 476a75 75 0 0 0-10 95c4 6 219 222 231 232 8 7 16 11 26 14 6 2 10 2 22 2s14 0 22-2l14-6c5-4 20-16 24-21l2-2-161-161L32 466l-9 10z"/>
       </svg>
     `;
@@ -274,6 +289,7 @@
         background-color: var(--color-background-button-text-default);
         color: var(--color-fill-button-icon);
     `;
+    activateBtn.setAttribute('id', 'hammer');
     activateBtn.setAttribute('title', 'Bann-Hammer');
     activateBtn.onclick = toggle;
 
@@ -314,7 +330,7 @@
         }
     }
     setInterval(appendActivatorBtn, 5000);
-
+    var themeName = "start"
     //events
     d.querySelector(".ignoreAll").onclick = ignoreAll;
     d.querySelector(".banAll").onclick = banAll;
@@ -322,6 +338,7 @@
     d.querySelector(".unbanAll").onclick = unbanAll;
     d.querySelector(".back").onclick = toggleBack;
     d.querySelector(".pause").onclick = togglePause;
+    d.querySelector(".princess").onclick = toggleTheme;
     d.querySelector(".import button.mdgBtnUnban").onclick = importMDGUnban;
     d.querySelector(".import button.mdgBtnTrolls").onclick = importMDGtrolls;
     d.querySelector(".import button.mdgBtnViewerBots").onclick = importMDGViewerBots;
@@ -342,11 +359,56 @@
         if (target.matches('.accountage')) accountage(target.dataset.user);
         if (target.matches('.toggleImport')) toggleImport();
         if (target.matches('.start')) toggleImport();
-
     });
 
     //Functions
-
+    function toggleTheme() {
+        var dataHeader = document.getElementById('header').innerHTML;
+        var dataFooter = document.getElementById('footer').innerHTML;
+        var dataHammer = document.getElementById('hammer').innerHTML;
+        var dataLogo = document.getElementById('empty').innerHTML;
+        console.log(dataLogo)
+        if (dataHeader.match("#34AE0C") && dataFooter.match("#34AE0C") && dataHammer.match("#34AE0C")) {
+          console.log("huh? I'm princess now!")
+          dataHeader = dataHeader.replace(/#34AE0C/g, themePrincess);
+          dataFooter = dataFooter.replace(/#34AE0C/g, themePrincess);
+          dataHammer = dataHammer.replace(/#34AE0C/g, themePrincess);
+          dataLogo = dataLogo.replace(/https:\/\/github.com\/TwitchmodsDACH\/Bann-Hammer\/blob\/main\/logo\.png\?raw\=true/gi, "https://i.pinimg.com/originals/1a/0c/75/1a0c75709e3f71a0018eabfefccc840c.gif");
+          document.getElementById('header').innerHTML = dataHeader;
+          document.getElementById('footer').innerHTML = dataFooter;
+          document.getElementById('hammer').innerHTML = dataHammer;
+          document.getElementById('empty').innerHTML = dataLogo;
+          console.log(dataLogo)
+        } else {
+          console.log("Muh? I'm no longer a princess anymore")
+          dataHeader = dataHeader.replace(/#FF1493/g, themeNormal);
+          dataFooter = dataFooter.replace(/#FF1493/g, themeNormal);
+          dataHammer = dataHammer.replace(/#FF1493/g, themeNormal);
+          dataLogo = dataLogo.replace(/https:\/\/i.pinimg.com\/originals\/1a\/0c\/75\/1a0c75709e3f71a0018eabfefccc840c\.gif/gi, "https://github.com/TwitchmodsDACH/Bann-Hammer/blob/main/logo.png?raw=true")
+          document.getElementById('header').innerHTML = dataHeader;
+          document.getElementById('footer').innerHTML = dataFooter;
+          document.getElementById('hammer').innerHTML = dataHammer;
+          document.getElementById('empty').innerHTML = dataLogo;
+          console.log(dataLogo)
+        }
+    }
+  /*      var dataHeader = ""
+        var dataFooter = ""
+        dataHeader = document.getElementById('header').innerHTML;
+        dataFooter = document.getElementById('footer').innerHTML;
+        dataHeader = dataHeader.replace(/#34ae0c/gi, themePrincess);
+        dataFooter = dataFooter.replace(/#34ae0c/gi, themePrincess);
+        document.getElementById('header').innerHTML = dataHeader;
+        document.getElementById('footer').innerHTML = dataFooter;
+        */
+/*      var dataHeader = ""
+        var dataFooter = ""
+        dataHeader = document.getElementById('header').innerHTML;
+        dataFooter = document.getElementById('footer').innerHTML;
+        dataHeader = dataHeader.replace(/#FF1493/gi, themeNormal);
+        dataFooter = dataFooter.replace(/#FF1493/gi, themeNormal);
+        document.getElementById('header').innerHTML = dataHeader;
+        document.getElementById('footer').innerHTML = dataFooter;*/
 
     function togglePause() {
       if (isPaused) {
@@ -701,7 +763,7 @@
       </li>`;
 
       let inner = queueList.size ? [...queueList].map(user => renderItem(user)).join('') : `
-        <div class="empty">
+        <div id="empty" class="empty">
           <img class="toggleImport" src="https://github.com/TwitchmodsDACH/Bann-Hammer/blob/main/logo.png?raw=true" title="Start Bann-Hammer" width="370px" style="cursor: pointer;">
         </div>`;
         d.querySelector('.list').innerHTML = `
@@ -710,4 +772,5 @@
         </ul>`;
     }
 })();
+
 
