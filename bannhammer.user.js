@@ -2,7 +2,7 @@
 // @name            TwitchModsDACH Bann-Hammer (by RaidHammer)
 // @description     A tool for moderating Twitch easier during hate raids
 // @namespace       https://github.com/TwitchmodsDACH/Bann-Hammer
-// @version         1.1.4.15
+// @version         1.1.4.16
 // @match           *://*.twitch.tv/*
 // @run-at          document-idle
 // @author          TwitchModsDACH (sofa) original code is from victornpb
@@ -23,7 +23,7 @@
     // Globle required Variables
     var myVersion;
     var version;
-    myVersion = "1.1.4.15"
+    myVersion = "1.1.4.16"
     var replaceFooter = "none"
     var isPaused = false;
     var queueList = new Set();
@@ -86,7 +86,6 @@
         updateText = "🚨 Update verfügbar 🚨"
       }
     }
-    checkVersion()
 
     // Frontend
     var html = /*html*/`
@@ -353,7 +352,7 @@
         }
     }
     setInterval(appendActivatorBtn, 5000);
-    var themeName = "start"
+
     //events
     d.querySelector(".ignoreAll").onclick = ignoreAll;
     d.querySelector(".banAll").onclick = banAll;
@@ -516,6 +515,7 @@
     function toggle() {
         if (d.style.display !== 'none') hide();
         else show();
+        checkVersion()
     }
 
     function toggleImport() {
@@ -849,6 +849,7 @@
         </ul>`;
     }
 })();
+
 
 
 
