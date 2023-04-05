@@ -21,6 +21,7 @@
 
 (function () {
     // Globle required Variables
+    var text;
     var myVersion;
     var newVersion;
     myVersion = "1.1.4.19"
