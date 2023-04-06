@@ -2,8 +2,8 @@
 // @name            TwitchModsDACH Bann-Hammer (by RaidHammer)
 // @description     A tool for moderating Twitch easier during hate raids
 // @namespace       https://github.com/TwitchmodsDACH/Bann-Hammer
-// @version         1.1.5.2.1
-// @match           *://*.twitch.tv/*
+// @version         2.0
+// @match           *://www.twitch.tv/*
 // @run-at          document-idle
 // @author          TwitchModsDACH (sofa) original code is from victornpb
 // @homepageURL     https://github.com/TwitchmodsDACH/Bann-Hammer
@@ -15,17 +15,21 @@
 // @license         MIT
 // ==/UserScript==
 
-
 /* jshint esversion: 8 */
 
-
-(function () {
+(function (urlCount) {
     // Globle required Variables
+    var myVersion = "2.0"
     var text;
-    var myVersion;
-    var newVersion;
-    myVersion = "1.1.5.2.1"
-    var bannedUsersStore = JSON.parse(localStorage.getItem('bannedUsersStore')) || [];
+    var mdgBtnAdvertisingText = "➕ mdg_advertising"
+    var mdgBtnFollowBotText = "➕ mdg_follow_bots"
+    var mdgBtnTrollsText = "➕ mdg_hate_trolls"
+    var mdgBtnUnbanText = "➕ MDG_UNBAN"
+    var mdgBtnViewerBotsText = "➕ mdg_viewer_bots"
+    var mdgBtnFlirtyMadText = "➕ mdg_flirty_mad"
+    var tmdBtnUnbanText = "➕ TMD_UNBAN"
+    var mdgBtnSpamBotsText = "➕ mdg_spam_bots"
+    var tmdBtnCrossbanText = "➕ tmd_crossbans"
     var replaceFooter = "none"
     var isPaused = false;
     var queueList = new Set();
@@ -33,16 +37,20 @@
     var bannedList = new Set();
     const LOGPREFIX = "[BANN-DHAMMER]";
     const delay = t => new Promise(r => setTimeout(r, t));
-    const urlParts = document.location.href.split("/");
-    const activeChannel = urlParts[urlParts.length - 1];
     var themePrincess = "#FF1493"
     var themeNormal = "#34AE0C"
     var themeTextColor = themeNormal
     var updateText = "keine neue Version verfügbar"
+    const urlParts = document.location.href.split("/");
+    const activeChannel = urlParts[urlParts.length - 1];
+    var TMDLocalStorageBanList = activeChannel + "_banlist"
+    var TMDLocalStorageUnBanList = activeChannel + "_unbanlist"
+    var bannedUsersStore = JSON.parse(localStorage.getItem(TMDLocalStorageBanList)) || [];
+    var unbannedUsersStore = JSON.parse(localStorage.getItem(TMDLocalStorageUnBanList)) || [];
 
     // This function is requried to disable CORS for the GitHub ban list repository
     // https://portswigger.net/web-security/cors
-    // If you didn't require this ban lists you can disable this   https://raw.githubusercontent.com/TwitchmodsDACH/Bannlisten/main/
+    // If you didn't require this ban lists you can disable this https://raw.githubusercontent.com/TwitchmodsDACH/Bannlisten/main/
     var corsDisable = {
       "id": 1,
       "enabled": true,
@@ -73,10 +81,7 @@
       GM_setValue("corsDisable", JSON.stringify(corsDisable));
     } else if (typeof localStorage !== "undefined") {
       localStorage.setItem("corsDisable", JSON.stringify(corsDisable));
-
     }
-
-
 
     // Frontend
     var html = /*html*/`
@@ -170,7 +175,7 @@
 
         .raidhammer button.unban {
             var(--color-text-button-primary);
-            background: #000000;  /* #34ae0c; */
+            background: #34ae0c;
             min-width: 60px;
         }
 
@@ -220,19 +225,19 @@
             <button class="importBtn" title="Benutzer zur Liste hinzufügen">➕</button>
         </div>
         <div style="align:center">
-          <button class="mdgBtnTrolls" style="width:32%" title="Importiert die mdg_hate_trolls Liste">➕ mdg_hate_trolls</button>
-          <button class="mdgBtnViewerBots" style="width:33%" title="Importiert mdg_hate_trolls Liste">➕ mdg_viewer_bots</button>
-          <button class="mdgBtnUnban" style="width:32%;color:#34ae0c" title="Importiert mdg_unban Liste">➕ MDG_UNBAN</button>
+          <button id="mdgBtnTrolls" class="mdgBtnTrolls" style="width:32%" title="Importiert die mdg_hate_trolls Liste">${mdgBtnTrollsText}</button>
+          <button id="mdgBtnViewerBots" class="mdgBtnViewerBots" style="width:33%" title="Importiert mdg_hate_trolls Liste">${mdgBtnViewerBotsText}</button>
+          <button id="mdgBtnUnban" class="mdgBtnUnban" style="width:32%;color:#34ae0c" title="Importiert mdg_unban Liste">${mdgBtnUnbanText}</button>
         </div>
         <div style="align:center">
-          <button class="mdgBtnFlirtyMad" style="width:32%" title="Importiert mdg_flirty_mad Liste">➕ mdg_flirty_mad </button>
-          <button class="mdgBtnFollowBot" style="width:33%" title="Importiert mdg_follow_bots Liste">➕ mdg_follow_bots</button>
-          <button class="tmdBtnUnban" style="width:32%;color:#34ae0c" title="Importiert TMD_unban Liste">➕ TMD_UNBAN</button>
+          <button id="mdgBtnFlirtyMad" class="mdgBtnFlirtyMad" style="width:32%" title="Importiert mdg_flirty_mad Liste">${mdgBtnFlirtyMadText}</button>
+          <button id="mdgBtnFollowBot" class="mdgBtnFollowBot" style="width:33%" title="Importiert mdg_follow_bots Liste">${mdgBtnFollowBotText}</button>
+          <button id="tmdBtnUnban" class="tmdBtnUnban" style="width:32%;color:#34ae0c" title="Importiert TMD_unban Liste">${tmdBtnUnbanText}</button>
         </div>
         <div style="align:center">
-          <button class="mdgBtnAdvertising" style="width:32%" title="Importiert mdg_advertising Liste">➕ mdg_advertising</button>
-          <button class="mdgBtnSpamBots" style="width:33%" title="Importiert mdg_spam_bots Liste">➕ mdg_spam_bots</button>
-          <button class="tmdBtnCrossban" style="width:32%" title="Importiert tmd_crossbans Liste">➕ tmd_crossbans</button>
+          <button id="mdgBtnAdvertising" class="mdgBtnAdvertising" style="width:32%" title="Importiert mdg_advertising Liste">${mdgBtnAdvertisingText}</button>
+          <button id="mdgBtnSpamBots" class="mdgBtnSpamBots" style="width:33%" title="Importiert mdg_spam_bots Liste">${mdgBtnSpamBotsText}</button>
+          <button id="tmdBtnCrossban" class="tmdBtnCrossban" style="width:32%" title="Importiert tmd_crossbans Liste">${tmdBtnCrossbanText}</button>
         </div>
     </div>
     <div class="body">
@@ -273,7 +278,7 @@
        }
     }
 
-    // modal
+    // Modal
     const d = document.createElement("div");
     d.style.display = 'none';
     d.innerHTML = html;
@@ -342,7 +347,7 @@
     }
     setInterval(appendActivatorBtn, 5000);
 
-    //events
+    // Eventhandler
     d.querySelector(".ignoreAll").onclick = ignoreAll;
     d.querySelector(".banAll").onclick = banAll;
     d.querySelector(".closeBtn").onclick = hide;
@@ -372,14 +377,14 @@
         if (target.matches('.start')) toggleImport();
     });
 
-    //Functions
+    // Function toggleTheme
     function toggleTheme() {
         var dataHeader = document.getElementById('header').innerHTML;
         var dataFooter = document.getElementById('footer').innerHTML;
         var dataHammer = document.getElementById('hammer').innerHTML;
         var dataLogo = document.getElementById('empty').innerHTML;
         if (dataHeader.match("#34AE0C") && dataFooter.match("#34AE0C") && dataHammer.match("#34AE0C")) {
-          console.log("huh? I'm princess now!")
+          console.log(LOGPREFIX, "huh? I'm a princess now!")
           dataHeader = dataHeader.replace(/#34AE0C/g, themePrincess);
           dataFooter = dataFooter.replace(/#34AE0C/g, themePrincess);
           dataHammer = dataHammer.replace(/#34AE0C/g, themePrincess);
@@ -460,7 +465,7 @@
 
           drawStars(200);
         } else {
-          console.log("Muh? I'm no longer a princess anymore")
+          console.log(LOGPREFIX, "Muh? I'm no longer a princess :-/")
           dataHeader = dataHeader.replace(/#FF1493/g, themeNormal);
           dataFooter = dataFooter.replace(/#FF1493/g, themeNormal);
           dataHammer = dataHammer.replace(/#FF1493/g, themeNormal);
@@ -475,12 +480,14 @@
         }
     }
 
+    // Function toggle pause/play
     function togglePause() {
       if (isPaused) {
         isPaused = false;
         var btn = document.getElementById("pause");
          btn.value = 'pause';
          btn.innerHTML = '⏸';
+         var queueList
       } else {
         isPaused = true;
         var btn = document.getElementById("pause");
@@ -489,19 +496,20 @@
       }
     }
 
+    // Function show Bann-Hammer window
     function show() {
         console.log(LOGPREFIX, 'Show');
         d.style.display = '';
         renderList();
-        console.log(activeChannel)
     }
 
+    // Function hide Bann-Hammer window
     function hide() {
         console.log(LOGPREFIX, 'Hide');
         d.style.display = 'none';
     }
 
-
+    // Function Check for new Versions
     function toggle() {
       function checkVersion() {
         fetch("https://raw.githubusercontent.com/TwitchmodsDACH/Bann-Hammer/main/bannhammer.user.js")
@@ -510,7 +518,6 @@
             var regex = /@version\s+(\d.*)/;
             var match = regex.exec(text);
             var newVersion = match[1];
-            console.log("erster", myVersion, newVersion)
             if ( myVersion != newVersion) {
               document.getElementById('manoooo').innerHTML = "🚨 Update verfügbar 🚨"
             } else {
@@ -523,6 +530,7 @@
         checkVersion();
     }
 
+    // Function toogle import
     function toggleImport() {
         document.getElementById("textfield").value = "";
         const importDiv = d.querySelector(".import");
@@ -538,6 +546,7 @@
         }
     }
 
+    // Function toggle back
     function toggleBack() {
       queueList.clear();
       document.getElementById("textfield").value = "";
@@ -557,27 +566,43 @@
     document.getElementById("replaceFooter").href = "https://github.com/TwitchmodsDACH/Bannlisten"
     }
 
-    function importList() {
-        const textarea = d.querySelector(".import textarea");
-        const lines = textarea.value.split(/\n/).map(line => line.trim()).filter(Boolean);
-        for (const line of lines) {
-          if (/^[\w_]+$/.test(line)) {
-            if (!(bannedUsersStore.includes(line))) {
-              queueList.add(line);
-            } else {
-              console.log("User already banned in channel:", line)
-            }
-	  }
-        }
-        textarea.value = '';
-        toggleImport();
-        renderList();
+    // Function to verify a user is already banned/unbannd in a channel
+    function userAlreadyBanned(user, button) {
+      if (!(bannedUsersStore.includes(user))) {
+         queueList.add(user)
+      } else {
+        document.getElementById(button).innerHTML = "already banned"
+      }
+    }
+    function userAlreadyUnBanned(user, button) {
+      queueList.clear();
+      if (!(unbannedUsersStore.includes(user))) {
+         queueList.add(user)
+      } else {
+        document.getElementById(button).innerHTML = "already unbanned"
+      }
     }
 
+    // Function to import the list
+    function importList() {
+      const textarea = d.querySelector(".import textarea");
+      const lines = textarea.value.split(/\n/).map(line => line.trim()).filter(Boolean);
+      for (const line of lines) {
+        if (/^[\w_]+$/.test(line)) {
+          queueList.add(line);
+        }
+      }
+      textarea.value = '';
+      toggleImport();
+      renderList();
+    }
+
+    // Function to insert list into textarea
     function insertText(text) {
         document.getElementById("textfield").value = text;
     }
 
+    // Functions to import lists from TwitchModsDACH Repository
     function importMDGtrolls() {
       queueList.clear();
       var usersToBan = [];
@@ -585,13 +610,17 @@
         .then((response) => response.text())
         .then((data) => {
             usersToBan.push(...data.split("\n").filter(Boolean));
-            usersToBan.forEach(name => queueList.add(name.replace(/\r/g, "")));
+            usersToBan.forEach(name => userAlreadyBanned(name.replace(/\r/g, ""), "mdgBtnTrolls"))
             textarea.value = '';
             insertText(Array.from(queueList))
             if (queueList.size != "0") { toggleImport(); renderList(); }
         });
       document.getElementById("replaceFooter").innerHTML = "Geladene Liste 'mdg_hate_troll_list.txt' anzeigen"
       document.getElementById("replaceFooter").href = "https://raw.githubusercontent.com/TwitchmodsDACH/Bannlisten/main/mdg_hate_troll_list.txt"
+      function dumdidum() {
+        document.getElementById("mdgBtnTrolls").innerHTML = mdgBtnTrollsText
+      }
+      setTimeout(dumdidum, 5000)
     }
 
     function importMDGUnban() {
@@ -601,13 +630,17 @@
         .then((response) => response.text())
         .then((data) => {
             usersToBan.push(...data.split("\n").filter(Boolean));
-            usersToBan.forEach(name => queueList.add(name.replace(/\r/g, "")));
+            usersToBan.forEach(name => userAlreadyUnBanned(name.replace(/\r/g, ""), "mdgBtnUnban"));
             textarea.value = '';
             insertText(Array.from(queueList))
             if (queueList.size != "0") { toggleImport(); renderList(); }
         });
       document.getElementById("replaceFooter").innerHTML = "Geladene Liste mdg_unbanlist.txt anzeigen"
       document.getElementById("replaceFooter").href = "https://raw.githubusercontent.com/TwitchmodsDACH/Bannlisten/main/mdg_unbanlist.txt"
+      function dumdidum() {
+        document.getElementById("mdgBtnUnban").innerHTML = mdgBtnUnbanText
+      }
+      setTimeout(dumdidum, 5000)
     }
 
     function importMDGViewerBots() {
@@ -617,13 +650,17 @@
         .then((response) => response.text())
         .then((data) => {
             usersToBan.push(...data.split("\n").filter(Boolean));
-            usersToBan.forEach(name => queueList.add(name.replace(/\r/g, "")));
+            usersToBan.forEach(name => userAlreadyBanned(name.replace(/\r/g, ""), "mdgBtnViewerBots"));
             textarea.value = '';
             insertText(Array.from(queueList))
             if (queueList.size != "0") { toggleImport(); renderList(); }
           });
       document.getElementById("replaceFooter").innerHTML = "Geladene Liste mdg_viewer_bot_list.txt anzeigen"
       document.getElementById("replaceFooter").href = "https://raw.githubusercontent.com/TwitchmodsDACH/Bannlisten/main/mdg_viewer_bot_list.txt"
+      function dumdidum() {
+        document.getElementById("mdgBtnViewerBots").innerHTML = mdgBtnViewerBotsText
+      }
+      setTimeout(dumdidum, 5000)
     }
 
     function importMDGFlirtyMad() {
@@ -633,13 +670,17 @@
         .then((response) => response.text())
         .then((data) => {
             usersToBan.push(...data.split("\n").filter(Boolean));
-            usersToBan.forEach(name => queueList.add(name.replace(/\r/g, "")));
+            usersToBan.forEach(name => userAlreadyBanned(name.replace(/\r/g, ""), "mdgBtnFlirtyMad"));
             textarea.value = '';
             insertText(Array.from(queueList))
             if (queueList.size != "0") { toggleImport(); renderList(); }
         });
       document.getElementById("replaceFooter").innerHTML = "Geladene Liste mdg_flirt_mad_manipulate_list.txt anzeigen"
       document.getElementById("replaceFooter").href = "https://raw.githubusercontent.com/TwitchmodsDACH/Bannlisten/main/mdg_flirt_mad_manipulate_list.txt"
+      function dumdidum() {
+        document.getElementById("mdgBtnFlirtyMad").innerHTML = mdgBtnFlirtyMadText
+      }
+      setTimeout(dumdidum, 5000)
     }
 
     function importMDGFollowBot() {
@@ -649,13 +690,17 @@
         .then((response) => response.text())
         .then((data) => {
             usersToBan.push(...data.split("\n").filter(Boolean));
-            usersToBan.forEach(name => queueList.add(name.replace(/\r/g, "")));
+            usersToBan.forEach(name => userAlreadyBanned(name.replace(/\r/g, ""), "mdgBtnFollowBot"));
             textarea.value = '';
             insertText(Array.from(queueList))
             if (queueList.size != "0") { toggleImport(); renderList(); }
         });
       document.getElementById("replaceFooter").innerHTML = "Geladene Liste mdg_follower_bot_list.txt anzeigen"
       document.getElementById("replaceFooter").href = "https://raw.githubusercontent.com/TwitchmodsDACH/Bannlisten/main/mdg_follower_bot_list.txt"
+      function dumdidum() {
+        document.getElementById("mdgBtnFollowBot").innerHTML = mdgBtnFollowBotText
+      }
+      setTimeout(dumdidum, 5000)
     }
 
     function importMDGAdvertising() {
@@ -665,13 +710,18 @@
         .then((response) => response.text())
         .then((data) => {
             usersToBan.push(...data.split("\n").filter(Boolean));
-            usersToBan.forEach(name => queueList.add(name.replace(/\r/g, "")));
+            usersToBan.forEach(name => userAlreadyBanned(name.replace(/\r/g, ""), "mdgBtnAdvertising"));
+            renderList()
             textarea.value = '';
             insertText(Array.from(queueList))
             if (queueList.size != "0") { toggleImport(); renderList(); }
         });
       document.getElementById("replaceFooter").innerHTML = "Geladene Liste mdg_unauthorized_advertising_list.txt anzeigen"
       document.getElementById("replaceFooter").href = "https://raw.githubusercontent.com/TwitchmodsDACH/Bannlisten/main/mdg_unauthorized_advertising_list.txt"
+      function dumdidum() {
+        document.getElementById("mdgBtnAdvertising").innerHTML = mdgBtnAdvertisingText
+      }
+      setTimeout(dumdidum, 5000)
     }
 
     function importMDGSpamBots() {
@@ -681,13 +731,16 @@
         .then((response) => response.text())
         .then((data) => {
             usersToBan.push(...data.split("\n").filter(Boolean));
-            usersToBan.forEach(name => queueList.add(name.replace(/\r/g, "")));
+            usersToBan.forEach(name => userAlreadyBanned(name.replace(/\r/g, ""), "mdgBtnSpamBots"));
             textarea.value = '';
-            insertText(Array.from(queueList))
             if (queueList.size != "0") { toggleImport(); renderList(); }
         });
       document.getElementById("replaceFooter").innerHTML = "Geladene Liste mdg_spam_bot_list.txt anzeigen"
       document.getElementById("replaceFooter").href = "https://raw.githubusercontent.com/TwitchmodsDACH/Bannlisten/main/mdg_spam_bot_list.txt"
+      function dumdidum() {
+        document.getElementById("mdgBtnSpamBots").innerHTML = mdgBtnSpamBotsText
+      }
+      setTimeout(dumdidum, 5000)
     }
 
     function importTMDUnban() {
@@ -697,13 +750,17 @@
         .then((response) => response.text())
         .then((data) => {
             usersToBan.push(...data.split("\n").filter(Boolean));
-            usersToBan.forEach(name => queueList.add(name.replace(/\r/g, "")));
+            usersToBan.forEach(name => userAlreadyBanned(name.replace(/\r/g, ""), "tmdBtnUnban"));
             textarea.value = '';
             insertText(Array.from(queueList))
             if (queueList.size != "0") { toggleImport(); renderList(); }
         });
       document.getElementById("replaceFooter").innerHTML = "Geladene Liste tmd_unbanlist.txt anzeigen"
       document.getElementById("replaceFooter").href = "https://raw.githubusercontent.com/TwitchmodsDACH/Bannlisten/main/tmd_unbanlist.txt"
+      function dumdidum() {
+        document.getElementById("tmdBtnUnban").innerHTML = tmdBtnUnbanText
+      }
+      setTimeout(dumdidum, 5000)
     }
 
     function importTMDCrossban() {
@@ -713,15 +770,20 @@
         .then((response) => response.text())
         .then((data) => {
             usersToBan.push(...data.split("\n").filter(Boolean));
-            usersToBan.forEach(name => queueList.add(name.replace(/\r/g, "")));
+            usersToBan.forEach(name => userAlreadyBanned(name.replace(/\r/g, ""), "tmdBtnCrossban"));
             textarea.value = '';
             insertText(Array.from(queueList))
             if (queueList.size != "0") { toggleImport(); renderList(); }
         });
       document.getElementById("replaceFooter").innerHTML = "Geladene Liste tmd_cross_banlist.txt anzeigen"
       document.getElementById("replaceFooter").href = "https://raw.githubusercontent.com/TwitchmodsDACH/Bannlisten/main/tmd_cross_banlist.txt"
+      function dumdidum() {
+        document.getElementById("tmdBtnCrossban").innerHTML = tmdBtnCrossbanText
+      }
+      setTimeout(dumdidum, 5000)
     }
 
+    // Functions to ban/unban/ignore/accountage
     function ignoreAll() {
       console.log(LOGPREFIX, 'Ignoring all...', queueList);
       for (const user of queueList) {
@@ -735,15 +797,15 @@
           // breake until button pressed again
           while (isPaused) {
           await delay(1000);
+          }
         }
-      }
-      banItem(user);
-      await delay(125);
+        banItem(user);
+        await delay(125);
       }
     }
 
     async function unbanAll() {
-      console.log(LOGPREFIX, 'Banning all...', queueList);
+      console.log(LOGPREFIX, 'Unbanning all...', queueList);
       for (const user of queueList) {
         if (isPaused) {
           // breake until button pressed again
@@ -757,35 +819,40 @@
     }
 
     function accountage(user) {
-      console.log(LOGPREFIX, 'Accountage', user);
+      //console.log(LOGPREFIX, 'Accountage', user);
       sendMessage('!accountage ' + user);
     }
 
     function ignoreItem(user) {
-      console.log(LOGPREFIX, 'Ignored user', user);
+      //console.log(LOGPREFIX, 'Ignored user', user);
       queueList.delete(user)
       ignoredList.add(user)
       renderList();
     }
 
     function unbanItem(user) {
-      console.log(LOGPREFIX, 'Unban user', user);
+      //console.log(LOGPREFIX, 'Unban user', user);
       queueList.delete(user);
       bannedList.add(user);
+      unbannedUsersStore.push(user)
       sendMessage('/unban ' + user);
+      localStorage.setItem(TMDLocalStorageUnBanList, JSON.stringify(unbannedUsersStore));
       renderList();
     }
 
     function banItem(user) {
       let banReason = document.getElementById("banReason").value;
-      console.log(LOGPREFIX, 'Ban user', user);
+      //console.log(LOGPREFIX, 'Ban user', user);
       queueList.delete(user);
       bannedList.add(user);
-      bannedUsersStore.add(user)
+      bannedUsersStore.push(user)
+      localStorage.setItem(TMDLocalStorageBanList, JSON.stringify(bannedUsersStore));
       sendMessage('/ban ' + user + ' ' + banReason );
+
       renderList();
     }
 
+    // helpful code to send Messages into chat
     function sendMessage(msg) {
       try{
         sendMessageOld(msg);
@@ -836,6 +903,7 @@
       _triggerKeyboardEvent(editor, 13);
     }
 
+    // Rendering the list or show logo
     function renderList() {
       d.querySelector(".ignoreAll").style.display = queueList.size ? '' : 'none';
       d.querySelector(".banAll").style.display = queueList.size ? '' : 'none';
@@ -861,3 +929,4 @@
         </ul>`;
     }
 })();
+

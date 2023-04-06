@@ -17,12 +17,15 @@ Unseren Mitglieder soll damit eine einfache Möglichkeit an die Hand geben werde
 - BannGrund-Funktion hinzugefügt
 - Update-Funktion hinzugefügt
 - Re-design durchgeführt
+- Prinzessinnen Wunsch hinzugefügt
+- Nützliche Moderator Tools hinzugefügt
+- Pause-Funktion hinzugefügt
+- **RICHTIG & WICHTIG** Funktion hinzugefügt mit der das Tool sich merken kann, in welchem Kanal schon welcher User damit gebannt wurde.
 
 ## Funktioniert ***nicht*** mit Safari
 Aktuell funktioniert der Bannhammer noch nicht unter Safari.
 
 ## Voraussetzungen
-
 Eine der folgenden Erweiterungen wird benötigt
 - Chrome: [Violentmonkey](https://chrome.google.com/webstore/detail/violent-monkey/jinjaccalgkegednnccohejagnlnfdag) or [Tampermonkey](https://chrome.google.com/webstore/detail/dhdgffkkebhmkfjojejmpbldmpobfkfo)
 - Firefox: [Greasemonkey](https://addons.mozilla.org/en-US/firefox/addon/greasemonkey/), [Tampermonkey](https://addons.mozilla.org/en-US/firefox/addon/tampermonkey/), or [Violentmonkey](https://addons.mozilla.org/firefox/addon/violentmonkey/)
@@ -68,8 +71,24 @@ Wir eine Twitch Seite besucht (ggf. offene Tabs neuladen), wird in einem Kanal i
 ⁉ Bei einigen kommt es je nach Einstellungen mit Erweiterungen wie Frankers/BetterTTV/7TVAPP zu Problem.
 Hier ggf. für das Bannen diese Erweiterungen deaktivieren, wenn man Probleme hat.
 
-### Postion des BannHammer Menü
-Wem die Position des Menüs nicht gefällt, kann diese im Code angepasst werden:
+### Die Sache mit "Merken wo welcher User gebannt wurde
+Das Tool verwendet dazu den LocalStorage des Browsers.
+Das bedeutet: 
+
+- benutzt du mehrere Browser? 
+  - Der Speicher ist pro Browser. __Browser übrgreifend funktioniert das also nicht!__
+- ***Du musst auch alle Kanäle in denen du schon gebannt hast noch einmal bannen, damit der Browser sich das auch merken kann***      
+- wenn du die Buggy Version 1.1.2.x hattest, dann musst du das LocalStorage für Twitch einmal löschen.
+  - Entwicklungs-Konsole des Browser öffnen
+  - den Tab Application/Anwendung suchen
+  - Dort LocalStorage auswählen (WICHTIG NICHT DIE COOCKIES LÖSCHEN)
+    - das hat zur Folge
+	- Du musst in jedem Chat einmal vorher wieder in den Chat klicken und die Chatregeln akzeptieren
+        - Du musst bei jedem Kanal der ab 18 Jahren ist noch einmal bestätigen das du 18 Jahre bist
+  - Das musst du auch immer machen, wenn du dein LocalStorage gelöscht/Browser zurückgesetzt/Betriebsystem neu aufgesetzt hast und kein Backup von deinem lokalen Speicher deines Browsers gemacht hast.
+
+### Postion des BannHammer Menü verändern
+Wem die Position des Menüs nicht gefällt, kann die Position im Code angepasst werden:
 
 ```
         .raidhammer {
@@ -89,6 +108,7 @@ Wem die Position des Menüs nicht gefällt, kann diese im Code angepasst werden:
 ### Das Tool läuft eine Weile, dann kommt ein Fehler auf der Website von Twitch
 Dann ist vermutlich für euer Setup die Geschwindigkeit zu hoch für die MassenBann/MassenUnbann funktionen.
 Das könnt ihr an diesen beiden Stellen anpassen:
+**HINWEIS:** Es ist dringend davon abzuraten den Wert runter zu setzen -> Twitch Shadow-Ban Gefahr!!!
 
 ```
     async function banAll() {
@@ -108,5 +128,9 @@ Das könnt ihr an diesen beiden Stellen anpassen:
     }
 ```
 
+### Für unsere Prizessinnen
+Auf vielfachen Wunsch einer Person wurde ein Prinzessinen Modus eingebaut. Wer Glitzer will muss sich das vorher überlegen, denn auch wenn die Farbe sich wieder ändert der Glitzerfunkel bleibt. Getreu dem Motto "Einmal Prinzessin immer Prinzessin" :P
+
 ## Support
-Unsere Mitglieder sind herzlich eingeladen im Discord ein Ticket im Kanal tmd-support zu öffnen.
+Da es wohl augenscheinlich mehr Leute gibt, die das Tool benutzen, als gedacht, könnt ihr auch hier ein Issue auf GitHub aufmachen.
+Unsere Mitglieder können auch sehr gern wie gehabt auf unserem Community Discord ebenfalls Tickets erstellen.
