@@ -4,26 +4,55 @@
 Der **TwitchModsDACH Bann-Hammer** ist ein Fork von [RaidHammer](https://github.com/victornpb/twitch-mass-ban).
 Ein sehr nützliches Tool für Moderatoren die in mehreren Kanälen massenhaft Leute zu bannen haben.
 
-Da uns manche Funktionen nicht genutzt oder schlecht implementiert waren und andere Funktionen wiederum gefehlt haben,
-wurde für die Community eine eigene Version des [RaidHammer](https://github.com/victornpb/twitch-mass-ban) erstellt.
+Da uns manche Funktionen des [RaidHammer](https://github.com/victornpb/twitch-mass-ban) nicht genutzt haben oder schlecht implementiert waren und andere Funktionen wiederum gefehlten, wurde für die Community eine eigene Version des [RaidHammer](https://github.com/victornpb/twitch-mass-ban) erstellt.
 
 Unseren Mitglieder soll damit eine einfache Möglichkeit an die Hand geben werden, auf einfache Weise & feingranular zu bestimmen, welche Liste gebannt oder entbannt werden soll.
 
+## Disclaimer
+Grundsätzlich ist mit Tools wie Tempermonkey und eigenen Users-Scripts vorsicht geboten. Denn mittels dieser Erweiterungen ist potentiell möglich, eure Session von Youtube Twitch oder was auch immer abzugreifen.
+Daher ist uns hier die Transparenz sehr wichtig.
+
+Es wurde sich ganz bewusst dagegen entschieden, satt das Senden von Chat-Nachrichten direkt gegen die API von Twitch zu gehen.
+Denn dazu müsset das Tool sich eben dann euren Token ausleihen für die Authentifizierung gegen die API.
+Und damit hier erst gar keine Vermutungen aufkommen, wurde einfach darauf verzichtet und an der Art,
+wie auch schon der Raidhammer funktioniert hat nichts geändert.
+
+Der Code kann aktuell nur von 2 Menschen hier im Repo verändert werden, weiter habt ihr bei der Updatet-Funktion immer die Möglichkeit direkt den Code zu sehen, der nachgeladen werden soll **BEVOR** ihr das Update durchführt.
+
+Wir hoffen damit die nötige Transparenz und Vertrauen in das Tool zuschaffen.
+
+## Funktionsweise des Bann-Hammer
+- Es wird geprüft auf welcher Twitch Seite mans ich befinden.
+- Es wird ein Speicher mit localStorage eures Browsers abgelegt.
+  -  kanalname_banlist
+  -  kanalname_unbanlist
+  - Dort werden nur die User gespeichert die gebannt/entbannt wurden in einem Kanel 
+- Es werden die Listen von [TwitchModsDach Bannlisten](https://github.com/TwitchmodsDACH/Bannlisten) abgerufen und mit dem localStorage eines Kanals abgeglichen und nur die User geladen, die noch nicht gebannt/entbannt wurden.
+- Ihr könnt eigene Liste bannen/entbannen.
+
+### Nachteile des Designs
+- Keine synchronisierten zwischen den Modertaoren eines Kanals.
+  - Im schlimmsten Fall lassen einmal alle Moderatoren die Listen reinmal durchlaufen in ein und dem selben Kanal, nicht dramatisch nur initial etwas lästig.
+- Löscht euer Browser beim Beenden den localStorage, werden auch die Listen gelöscht.
+  - Das Problem hat man auch beim Geräte wechseln oder bei Neuinstallation
+
+__In die Nachteile wird keine Arbeit investiert, da das Tool irgendwann durch einen vernünftigen Twitch-Bot ersetzt werden soll, mit dem ihr dann gar keine Arbeit mehr habt nach der einmaligen Einrichtung__
+
 ## Wesentliche Veränderungen zu [RaidHammer](https://github.com/victornpb/twitch-mass-ban)
 
-- CORS-Funktion eingebaut 
-- [TwitchModsDach Bannlisten](https://github.com/TwitchmodsDACH/Bannlisten) integriert
+- CORS-Funktion eingebaut, um auf das Repository [TwitchModsDach Bannlisten](https://github.com/TwitchmodsDACH/Bannlisten) zugreifen zu können
+- [TwitchModsDach Bannlisten](https://github.com/TwitchmodsDACH/Bannlisten) Synchronisation integriert
 - Unban-Funktion hinzugefügt
 - BannGrund-Funktion hinzugefügt
 - Update-Funktion hinzugefügt
-- Re-design durchgeführt
-- Prinzessinnen Wunsch hinzugefügt
+- Re-Design durchgeführt
+- Prinzessinnen Modus hinzugefügt
 - Nützliche Moderator Tools hinzugefügt
 - Pause-Funktion hinzugefügt
-- **RICHTIG & WICHTIG** Funktion hinzugefügt mit der das Tool sich merken kann, in welchem Kanal schon welcher User damit gebannt wurde.
+- LocalStorage integriert
 
-## Funktioniert ***nicht*** mit Safari
-Aktuell funktioniert der Bannhammer noch nicht unter Safari.
+## Funktioniert ***nicht*** mit ...
+- Safari
 
 ## Voraussetzungen
 Eine der folgenden Erweiterungen wird benötigt
@@ -38,7 +67,7 @@ Eine der folgenden Erweiterungen wird benötigt
 Wenn Termper-/Grease-/ViolentMonkey installiert ist, einfach diesen Link anklicken --> [bannhammer.user.js](https://github.com/TwitchmodsDACH/Bann-Hammer/raw/main/bannhammer.user.js)
 Es öffnet sich euer Monkey und man kann das User-Script mit einem Klick instalieren.
 
-Wenn alles richtig durchgeführt ist sollte es aussehen (das Logo kann variieren je nach ....Monkey).
+Wenn alles richtig durchgeführt ist, sollte es aussehen (das Logo kann variieren je nach ....Monkey).
 
 ![](dokumentation/allesaktiviert.png)
 
@@ -128,7 +157,7 @@ Das könnt ihr an diesen beiden Stellen anpassen:
     }
 ```
 
-### Für unsere Prizessinnen
+### Für unsere Prinzessinnen
 Auf vielfachen Wunsch einer Person wurde ein Prinzessinen Modus eingebaut. Wer Glitzer will muss sich das vorher überlegen, denn auch wenn die Farbe sich wieder ändert der Glitzerfunkel bleibt. Getreu dem Motto "Einmal Prinzessin immer Prinzessin" :P
 
 ## Support
