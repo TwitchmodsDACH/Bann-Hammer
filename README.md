@@ -22,21 +22,23 @@ Der Code kann aktuell nur von 2 Menschen hier im Repo verändert werden, weiter 
 Wir hoffen damit die nötige Transparenz und Vertrauen in das Tool zuschaffen.
 
 ## Funktionsweise des Bann-Hammer
-- Es wird geprüft auf welcher Twitch Seite mans ich befinden.
 - Es wird ein Speicher mit localStorage eures Browsers abgelegt.
-  -  kanalname_banlist
-  -  kanalname_unbanlist
-  - Dort werden nur die User gespeichert die gebannt/entbannt wurden in einem Kanel 
-- Es werden die Listen von [TwitchModsDach Bannlisten](https://github.com/TwitchmodsDACH/Bannlisten) abgerufen und mit dem localStorage eines Kanals abgeglichen und nur die User geladen, die noch nicht gebannt/entbannt wurden.
-- Ihr könnt eigene Liste bannen/entbannen.
+  - kanalname_banlist (Pro Kanal wird ein Speicher angelegt)
+  - kanalname_unbanlist (Pro Kanal wird ein Speicher angelegt)
+  - Dort werden nur die User gespeichert die gebannt/entbannt wurden in einem Kanal
+  - Wird ein User entbannt wird er, wenn vorhanden, aus der jeweiligen kanalname_banlist entfernt.
+- Es können die Listen von [TwitchModsDach Bannlisten](https://github.com/TwitchmodsDACH/Bannlisten) abgerufen werden. Dabei wird das localStorage eines Kanals abgeglichen und nur die User geladen, die noch nicht gebannt/entbannt wurden.
+- Es können auch eigene Liste mittels Copy&Paste eingefügt werden. 
+  - hierbei erfolgt keine Überprüfung, ob User die Ihr in das Tool kopiert bereits gebannt wurden.
+  - Dadurch kann man auch überprüfen, ob eine Bannliste wirklich auch gebannt hat, wenn man die Liste noch einmal per Copy&Paste einfügt und durchlaufen lässt.
 
 ### Nachteile des Designs
-- Keine synchronisierten zwischen den Modertaoren eines Kanals.
-  - Im schlimmsten Fall lassen einmal alle Moderatoren die Listen reinmal durchlaufen in ein und dem selben Kanal, nicht dramatisch nur initial etwas lästig.
+- Keine synchronisierten zwischen den Moderatoren eines Kanals.
+  - Im schlimmsten Fall lassen einmal alle Moderatoren eines Kanals die Listen durchlaufen. Das ist nicht dramatisch nur initial etwas lästig.
 - Löscht euer Browser beim Beenden den localStorage, werden auch die Listen gelöscht.
-  - Das Problem hat man auch beim Geräte wechseln oder bei Neuinstallation
+  - Das Problem hat man auch beim Gerätewechsel oder bei einer Neuinstallation
 
-__In die Nachteile wird keine Arbeit investiert, da das Tool irgendwann durch einen vernünftigen Twitch-Bot ersetzt werden soll, mit dem ihr dann gar keine Arbeit mehr habt nach der einmaligen Einrichtung__
+__In diese Nachteile wird keine Arbeit investiert, da das Tool irgendwann durch einen vernünftigen Twitch-Bot ersetzt werden soll, mit ihr dann gar keine Arbeit mehr habt__
 
 ## Wesentliche Veränderungen zu [RaidHammer](https://github.com/victornpb/twitch-mass-ban)
 
@@ -50,12 +52,16 @@ __In die Nachteile wird keine Arbeit investiert, da das Tool irgendwann durch ei
 - Nützliche Moderator Tools hinzugefügt
 - Pause-Funktion hinzugefügt
 - LocalStorage integriert
+- Die Funktion das Follower automatisch auch im Banntool angezeigt werden wurde ausgebaut
+  - Sie funktionierte im [RaidHammer](https://github.com/victornpb/twitch-mass-ban) über die Mechanik, das Streamlabs oder Streamelemnts einen ganz bestimmten Satz sagen mussten, damit das erkannt wird. Follower löschen kann man mit [ComanderRoot](https://twitch-tools.rootonline.de/).
 
 ## Funktioniert ***nicht*** mit ...
+
 - Safari
 
 ## Voraussetzungen
-Eine der folgenden Erweiterungen wird benötigt
+Eine der folgenden Erweiterungen wird benötigt.
+
 - Chrome: [Violentmonkey](https://chrome.google.com/webstore/detail/violent-monkey/jinjaccalgkegednnccohejagnlnfdag) or [Tampermonkey](https://chrome.google.com/webstore/detail/dhdgffkkebhmkfjojejmpbldmpobfkfo)
 - Firefox: [Greasemonkey](https://addons.mozilla.org/en-US/firefox/addon/greasemonkey/), [Tampermonkey](https://addons.mozilla.org/en-US/firefox/addon/tampermonkey/), or [Violentmonkey](https://addons.mozilla.org/firefox/addon/violentmonkey/)
 - Edge: [Tampermonkey](https://microsoftedge.microsoft.com/addons/detail/iikmkjmpaadaobahmlepeloendndfphd) or [Violentmonkey](https://microsoftedge.microsoft.com/addons/detail/eeagobfjdenkkddmbclomhiblgggliao)
@@ -102,19 +108,18 @@ Hier ggf. für das Bannen diese Erweiterungen deaktivieren, wenn man Probleme ha
 
 ### Die Sache mit "Merken wo welcher User gebannt wurde
 Das Tool verwendet dazu den LocalStorage des Browsers.
-Das bedeutet: 
 
-- benutzt du mehrere Browser? 
-  - Der Speicher ist pro Browser. __Browser übrgreifend funktioniert das also nicht!__
-- ***Du musst auch alle Kanäle in denen du schon gebannt hast noch einmal bannen, damit der Browser sich das auch merken kann***      
-- wenn du die Buggy Version 1.1.2.x hattest, dann musst du das LocalStorage für Twitch einmal löschen.
+Das bedeutet: 
+- man benutzt mehrere Browser? 
+  - Der Speicher ist pro Browser. __Browser übergreifend funktioniert das also nicht!__
+- Im LocalStorage gespeichert Listen löschen
   - Entwicklungs-Konsole des Browser öffnen
   - den Tab Application/Anwendung suchen
-  - Dort LocalStorage auswählen (WICHTIG NICHT DIE COOCKIES LÖSCHEN)
-    - das hat zur Folge
-	- Du musst in jedem Chat einmal vorher wieder in den Chat klicken und die Chatregeln akzeptieren
-        - Du musst bei jedem Kanal der ab 18 Jahren ist noch einmal bestätigen das du 18 Jahre bist
-  - Das musst du auch immer machen, wenn du dein LocalStorage gelöscht/Browser zurückgesetzt/Betriebsystem neu aufgesetzt hast und kein Backup von deinem lokalen Speicher deines Browsers gemacht hast.
+  - Dort LocalStorage auswählen
+  - dann nach "\_bannlist" filtern
+  - die gefunden Einträge mit Rechts-Klick löschen
+
+***Werden Coockies und das LocalStorage gelöscht, müssen alle Listen noch einmal gebannt werden!***
 
 ### Postion des BannHammer Menü verändern
 Wem die Position des Menüs nicht gefällt, kann die Position im Code angepasst werden:
@@ -158,8 +163,8 @@ Das könnt ihr an diesen beiden Stellen anpassen:
 ```
 
 ### Für unsere Prinzessinnen
-Auf vielfachen Wunsch einer Person wurde ein Prinzessinen Modus eingebaut. Wer Glitzer will muss sich das vorher überlegen, denn auch wenn die Farbe sich wieder ändert der Glitzerfunkel bleibt. Getreu dem Motto "Einmal Prinzessin immer Prinzessin" :P
+Auf vielfachen Wunsch einer Person wurde ein Prinzessinen Modus eingebaut. Wer Glitzer will muss sich das vorher gut überlegen, denn auch wenn die Farbe sich wieder ändert **der Glitzerfunkel bleibt**. Getreu dem Motto "__Einmal Prinzessin immer Prinzessin__" :P
 
 ## Support
-Da es wohl augenscheinlich mehr Leute gibt, die das Tool benutzen, als gedacht, könnt ihr auch hier ein Issue auf GitHub aufmachen.
-Unsere Mitglieder können auch sehr gern wie gehabt auf unserem Community Discord ebenfalls Tickets erstellen.
+Ihr könnt gern [hier](https://github.com/TwitchmodsDACH/Bann-Hammer/issues) ein Ticket aufmachen.
+Unsere Mitglieder können auch sehr gern auf unserem Community Discord ein Ticket erstellen.

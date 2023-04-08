@@ -2,12 +2,12 @@
 // @name            TwitchModsDACH Bann-Hammer (by RaidHammer)
 // @description     A tool for moderating Twitch easier during hate raids
 // @namespace       https://github.com/TwitchmodsDACH/Bann-Hammer
-// @version         2.0
+// @version         2.0.0.2
 // @match           *://www.twitch.tv/*
 // @run-at          document-idle
 // @author          TwitchModsDACH (sofa) original code is from victornpb
 // @homepageURL     https://github.com/TwitchmodsDACH/Bann-Hammer
-// @supportURL      https://github.com/TwitchmodsDACH/Bann-Hammer
+// @supportURL      https://github.com/TwitchmodsDACH/Bann-Hammer/issues
 // @contributionURL https://github.com/TwitchmodsDACH/Bann-Hammer
 // @grant           GM_setValue
 // @grant           GM_getValue
@@ -19,8 +19,10 @@
 
 (function (urlCount) {
     // Globle required Variables
-    var myVersion = "2.0"
+    var myVersion = "2.0.0.2"
     var text;
+    var banReason;
+    var urlBannlisten = "https://github.com/TwitchmodsDACH/Bannlisten"
     var mdgBtnAdvertisingText = "➕ mdg_advertising"
     var mdgBtnFollowBotText = "➕ mdg_follow_bots"
     var mdgBtnTrollsText = "➕ mdg_hate_trolls"
@@ -35,7 +37,7 @@
     var queueList = new Set();
     var ignoredList = new Set();
     var bannedList = new Set();
-    const LOGPREFIX = "[BANN-DHAMMER]";
+    const LOGPREFIX = "[BANN-HAMMER]";
     const delay = t => new Promise(r => setTimeout(r, t));
     var themePrincess = "#FF1493"
     var themeNormal = "#34AE0C"
@@ -98,6 +100,10 @@
             box-shadow: var(--shadow-elevation-2);
             padding: 5px;
             min-width: 500px;
+        }
+        .raidhammer .handle {
+            cursor: move;
+            user-select: none;
         }
 
         .raidhammer .svg {
@@ -203,6 +209,7 @@
 
     <div class="header">
         <span style="flex-grow: -1;"></span>
+        <span class="handle" style="flex-grow: -1;"></span>
         <button class="princess"><img src="https://raw.githubusercontent.com/TwitchmodsDACH/Bann-Hammer/main/dokumentation/magicwand.png"  title="Für die Prinzessinnen unter uns" width="20px" height="20px"></button>
 
         <span style="flex-grow: 1;"></span>
@@ -221,8 +228,8 @@
     <div id="import" class="import" style="display:none;">
         <textarea id="textfield" placeholder="Ein Benutzername pro Zeile"></textarea>
         <div style="text-align:right;">
-            <input type="text" id="banReason" style="width:450px" placeholder="Gib einen Bann-Grund an" />
-            <button class="importBtn" title="Benutzer zur Liste hinzufügen">➕</button>
+            <input type="text" id="banReason" style="width:66%" placeholder="Gib einen Bann-Grund an" />
+            <button class="importBtn" title="Benutzer zur Liste hinzufügen" style="width:32%">➕ Hinzufügen</button>
         </div>
         <div style="align:center">
           <button id="mdgBtnTrolls" class="mdgBtnTrolls" style="width:32%" title="Importiert die mdg_hate_trolls Liste">${mdgBtnTrollsText}</button>
@@ -246,9 +253,11 @@
           <span style="flex-grow: 2;"></span>
           <div id="buttons" class="buttons">
             <button class="back" title="Zurück">⬅</button>
+            <button class="MooBot" title="Öffnet Moobot" onclick="window.open('https://moo.bot/','_blank')"><img src="https://moo.bot/favicon.ico" height="17px" style = "position:relative; top:1px;"></button>
+            <button class="NightBot" title="Öffnet Nightbot" onclick="window.open('https://nightbot.tv/dashboard','_blank')"><img src="https://logodix.com/logo/1909538.png" height="17px" style = "position:relative; top:1px;"></button>
             <button class="comanderRoot" title="Öffnet ComanderRoot" onclick="window.open('https://twitch-tools.rootonline.de','_blank')">🤖</button>
-            <button class="sLabs" title="Öffnet Streamlabs" onclick="window.open('https://streamlabs.com/dashboard','_blank')"><img src="https://cdn.streamlabs.com/static/imgs/streamlabs-logos/app-icon/streamlabs-app-icon.png" height="17px" style = "position:relative; top:2px;"></button>
-            <button class="sElements" title="Öffnet Streamelements" onclick="window.open('https://streamelements.com/dashboard','_blank')"><img src="https://avatars.githubusercontent.com/u/16977512?s=17&v=4" style="position:relative; top:2px;"></button>
+            <button class="sLabs" title="Öffnet Streamlabs" onclick="window.open('https://streamlabs.com/dashboard','_blank')"><img src="https://cdn.streamlabs.com/static/imgs/streamlabs-logos/app-icon/streamlabs-app-icon.png" height="17px" style = "position:relative; top:1px;"></button>
+            <button class="sElements" title="Öffnet Streamelements" onclick="window.open('https://streamelements.com/dashboard','_blank')"><img src="https://avatars.githubusercontent.com/u/16977512?s=17&v=4" style="position:relative; top:1px;"></button>
             <button class="chatstats" title="Öffnet SullyGnome Kanal-Statistiken für den aktuellen Kanal" onclick="window.open('https://sullygnome.com/channel/${activeChannel}','_blank')">📈</button>
             <button class="modLogger" title="Öffnet ModLogger für den aktuellen Kanal" onclick="window.open('https://jvpeek.github.io/twitchmodlogger/?channel=${activeChannel}','_blank')">🗄</button>
             <button class="chatDeepStats" title="Öffnet ChatStats für den aktuellen Kanal" onclick="window.open('https://echtkpvl.github.io/echt-twitch/chat-stats.html?channel=${activeChannel}','_blank')">🩻</button>
@@ -263,6 +272,42 @@
     <a href="https://github.com/TwitchmodsDACH/Bannlisten" target="_blank" style="color: ${themeTextColor};" id="replaceFooter" titel="Zur Bannliste">TwitchModsDACH Bannlisten</a>&nbsp;-&nbsp;
     <a id="manoooo" href="https://github.com/TwitchmodsDACH/Bann-Hammer/raw/main/bannhammer.user.js" title="Aktuelle Bannhammer Version installieren">${updateText}</a>&nbsp;-&nbsp;&nbsp;${myVersion}
     </div>`;
+
+document.addEventListener('DOMContentLoaded', () => {
+    // ... bestehender Code ...
+
+  document.body.appendChild(raidhammer);
+
+  function addDraggable() {
+    const raidhammer = document.getElementById('raidhammer');
+    const handle = raidhammer.querySelector('.handle');
+
+    let dragging = false;
+    let offsetX, offsetY;
+
+    handle.addEventListener('mousedown', (e) => {
+      dragging = true;
+      offsetX = e.clientX - raidhammer.getBoundingClientRect().left;
+      offsetY = e.clientY - raidhammer.getBoundingClientRect().top;
+      e.preventDefault(); // Verhindert, dass das Standardverhalten des Browsers ausgeführt wird
+    });
+
+    document.addEventListener('mousemove', (e) => {
+      if (!dragging) return;
+
+      raidhammer.style.right = 'auto';
+      raidhammer.style.left = e.clientX - offsetX + 'px';
+      raidhammer.style.top = e.clientY - offsetY + 'px';
+    });
+
+    document.addEventListener('mouseup', () => {
+      dragging = false;
+    });
+  }
+
+  addDraggable(); // Füge diese Zeile hier ein
+});
+
 
     // PauseButton
     function pauseBanAll() {
@@ -382,17 +427,14 @@
         var dataHeader = document.getElementById('header').innerHTML;
         var dataFooter = document.getElementById('footer').innerHTML;
         var dataHammer = document.getElementById('hammer').innerHTML;
-        var dataLogo = document.getElementById('empty').innerHTML;
         if (dataHeader.match("#34AE0C") && dataFooter.match("#34AE0C") && dataHammer.match("#34AE0C")) {
           console.log(LOGPREFIX, "huh? I'm a princess now!")
           dataHeader = dataHeader.replace(/#34AE0C/g, themePrincess);
           dataFooter = dataFooter.replace(/#34AE0C/g, themePrincess);
           dataHammer = dataHammer.replace(/#34AE0C/g, themePrincess);
-          dataLogo = dataLogo.replace(/https:\/\/github\.com\/TwitchmodsDACH\/Bann-Hammer\/blob\/main\/logo\.png\?raw\=true/gi, "https://raw.githubusercontent.com/TwitchmodsDACH/Bann-Hammer/main/dokumentation/fee.gif");
           document.getElementById('header').innerHTML = dataHeader;
           document.getElementById('footer').innerHTML = dataFooter;
           document.getElementById('hammer').innerHTML = dataHammer;
-          document.getElementById('empty').innerHTML = dataLogo;
           const canvas = document.createElement("canvas");
           canvas.style.position = "fixed";
           canvas.style.top = "0";
@@ -469,14 +511,11 @@
           dataHeader = dataHeader.replace(/#FF1493/g, themeNormal);
           dataFooter = dataFooter.replace(/#FF1493/g, themeNormal);
           dataHammer = dataHammer.replace(/#FF1493/g, themeNormal);
-          dataLogo = dataLogo.replace(/https:\/\/raw.githubusercontent.com\/TwitchmodsDACH\/Bann-Hammer\/main\/dokumentation\/fee.gif/gi, "https://github.com/TwitchmodsDACH/Bann-Hammer/blob/main/logo.png?raw=true")
           document.getElementById('header').innerHTML = dataHeader;
           document.getElementById('footer').innerHTML = dataFooter;
           document.getElementById('hammer').innerHTML = dataHammer;
-          document.getElementById('empty').innerHTML = dataLogo;
           const canvas = document.createElement("canvas");
           const targetElement = document.getElementById("body");
-          targetElement.removeChild(canvas);
         }
     }
 
@@ -518,7 +557,7 @@
             var regex = /@version\s+(\d.*)/;
             var match = regex.exec(text);
             var newVersion = match[1];
-            if ( myVersion != newVersion) {
+            if (myVersion < newVersion) {
               document.getElementById('manoooo').innerHTML = "🚨 Update verfügbar 🚨"
             } else {
               document.getElementById('manoooo').innerHTML = "keine neuen Updates"
@@ -568,18 +607,19 @@
 
     // Function to verify a user is already banned/unbannd in a channel
     function userAlreadyBanned(user, button) {
-      if (!(bannedUsersStore.includes(user))) {
+      if (!bannedUsersStore.includes(user)) {
          queueList.add(user)
       } else {
         document.getElementById(button).innerHTML = "already banned"
+        console.log(LOGPREFIX, user + " already banned" + activeChannel)
       }
     }
     function userAlreadyUnBanned(user, button) {
-      queueList.clear();
-      if (!(unbannedUsersStore.includes(user))) {
+      if (!unbannedUsersStore.includes(user)) {
          queueList.add(user)
       } else {
         document.getElementById(button).innerHTML = "already unbanned"
+        console.log(LOGPREFIX, user + " already unbanned in " + activeChannel)
       }
     }
 
@@ -606,6 +646,9 @@
     function importMDGtrolls() {
       queueList.clear();
       var usersToBan = [];
+      if (document.getElementById("banReason").value == "") {
+        document.getElementById("banReason").value = urlBannlisten
+      }
       fetch("https://raw.githubusercontent.com/TwitchmodsDACH/Bannlisten/main/mdg_hate_troll_list.txt")
         .then((response) => response.text())
         .then((data) => {
@@ -646,6 +689,9 @@
     function importMDGViewerBots() {
       queueList.clear();
       var usersToBan = [];
+      if (document.getElementById("banReason").value == "") {
+        document.getElementById("banReason").value = urlBannlisten
+      }
       fetch("https://raw.githubusercontent.com/TwitchmodsDACH/Bannlisten/main/mdg_viewer_bot_list.txt")
         .then((response) => response.text())
         .then((data) => {
@@ -666,6 +712,9 @@
     function importMDGFlirtyMad() {
       queueList.clear();
       var usersToBan = [];
+      if (document.getElementById("banReason").value == "") {
+        document.getElementById("banReason").value = urlBannlisten
+      }
       fetch("https://raw.githubusercontent.com/TwitchmodsDACH/Bannlisten/main/mdg_flirt_mad_manipulate_list.txt")
         .then((response) => response.text())
         .then((data) => {
@@ -684,6 +733,9 @@
     }
 
     function importMDGFollowBot() {
+      if (document.getElementById("banReason").value == "") {
+        document.getElementById("banReason").value = urlBannlisten
+      }
       queueList.clear();
       var usersToBan = [];
       fetch("https://raw.githubusercontent.com/TwitchmodsDACH/Bannlisten/main/mdg_follower_bot_list.txt")
@@ -704,6 +756,9 @@
     }
 
     function importMDGAdvertising() {
+      if (document.getElementById("banReason").value == "") {
+        document.getElementById("banReason").value = urlBannlisten
+      }
       queueList.clear();
       var usersToBan = [];
       fetch("https://raw.githubusercontent.com/TwitchmodsDACH/Bannlisten/main/mdg_unauthorized_advertising_list.txt")
@@ -727,6 +782,9 @@
     function importMDGSpamBots() {
       queueList.clear();
       var usersToBan = [];
+      if (document.getElementById("banReason").value == "") {
+        document.getElementById("banReason").value = urlBannlisten
+      }
       fetch("https://raw.githubusercontent.com/TwitchmodsDACH/Bannlisten/main/mdg_spam_bot_list.txt")
         .then((response) => response.text())
         .then((data) => {
@@ -746,6 +804,9 @@
     function importTMDUnban() {
       queueList.clear();
       var usersToBan = [];
+      if (document.getElementById("banReason").value == "") {
+        document.getElementById("banReason").value = urlBannlisten
+      }
       fetch("https://raw.githubusercontent.com/TwitchmodsDACH/Bannlisten/main/tmd_unbanlist.txt")
         .then((response) => response.text())
         .then((data) => {
@@ -766,6 +827,9 @@
     function importTMDCrossban() {
       queueList.clear();
       var usersToBan = [];
+      if (document.getElementById("banReason").value == "") {
+        document.getElementById("banReason").value = urlBannlisten
+      }
       fetch("https://raw.githubusercontent.com/TwitchmodsDACH/Bannlisten/main/tmd_cross_banlist.txt")
         .then((response) => response.text())
         .then((data) => {
@@ -818,37 +882,41 @@
       }
     }
 
+    // Function send !accountage user into chat, to trigger Streamelements Bot
     function accountage(user) {
-      //console.log(LOGPREFIX, 'Accountage', user);
+      console.log(LOGPREFIX, 'send !accountage', user);
       sendMessage('!accountage ' + user);
     }
 
+    // Function to remove User from action list
     function ignoreItem(user) {
-      //console.log(LOGPREFIX, 'Ignored user', user);
+      console.log(LOGPREFIX, 'Ignore user:', user);
       queueList.delete(user)
       ignoredList.add(user)
       renderList();
     }
 
+    // Function to unban a user
     function unbanItem(user) {
-      //console.log(LOGPREFIX, 'Unban user', user);
+      console.log(LOGPREFIX, 'Unban user:', user);
       queueList.delete(user);
       bannedList.add(user);
       unbannedUsersStore.push(user)
       sendMessage('/unban ' + user);
       localStorage.setItem(TMDLocalStorageUnBanList, JSON.stringify(unbannedUsersStore));
+      localStorage.setItem(TMDLocalStorageBanList, JSON.stringify(JSON.parse(localStorage.getItem(TMDLocalStorageBanList)).filter(unbannedUser => unbannedUser !== user)));
       renderList();
     }
 
+    // Function to ban a user
     function banItem(user) {
-      let banReason = document.getElementById("banReason").value;
+      banReason = document.getElementById("banReason").value;
       //console.log(LOGPREFIX, 'Ban user', user);
       queueList.delete(user);
       bannedList.add(user);
       bannedUsersStore.push(user)
       localStorage.setItem(TMDLocalStorageBanList, JSON.stringify(bannedUsersStore));
       sendMessage('/ban ' + user + ' ' + banReason );
-
       renderList();
     }
 
