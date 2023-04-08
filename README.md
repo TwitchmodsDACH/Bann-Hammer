@@ -167,4 +167,4 @@ Auf vielfachen Wunsch einer Person wurde ein Prinzessinen Modus eingebaut. Wer G
 
 ## Support
 Ihr könnt gern [hier](https://github.com/TwitchmodsDACH/Bann-Hammer/issues) ein Ticket aufmachen.
-Unsere Mitglieder können auch sehr gern auf unserem Community Discord ein Ticket erstellen.
+Unsere Mitglieder können auch sehr gern auf unserem [Community Discord](https://discord.gg/e8YgSBeX86) ein Ticket erstellen.
