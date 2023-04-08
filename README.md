@@ -162,7 +162,7 @@ Das könnt ihr an diesen beiden Stellen anpassen:
     }
 ```
 
-### Für unsere Prinzessinnen
+## Für unsere Prinzessinnen
 Auf vielfachen Wunsch einer Person wurde ein Prinzessinen Modus eingebaut. Wer Glitzer will muss sich das vorher gut überlegen, denn auch wenn die Farbe sich wieder ändert **der Glitzerfunkel bleibt**. Getreu dem Motto "__Einmal Prinzessin immer Prinzessin__" :P
 
 ## Support
