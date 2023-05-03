@@ -2,7 +2,7 @@
 // @name            TwitchModsDACH Bann-Hammer (by RaidHammer)
 // @description     A tool for moderating Twitch easier during hate raids
 // @namespace       https://github.com/TwitchmodsDACH/Bann-Hammer
-// @version         2.0.0.2
+// @version         2.0.0.3
 // @match           *://www.twitch.tv/*
 // @run-at          document-idle
 // @author          TwitchModsDACH (sofa) original code is from victornpb
@@ -19,7 +19,7 @@
 
 (function (urlCount) {
     // Globle required Variables
-    var myVersion = "2.0.0.2"
+    var myVersion = "2.0.0.3"
     var text;
     var banReason;
     var urlBannlisten = "https://github.com/TwitchmodsDACH/Bannlisten"
@@ -761,7 +761,7 @@ document.addEventListener('DOMContentLoaded', () => {
       }
       queueList.clear();
       var usersToBan = [];
-      fetch("https://raw.githubusercontent.com/TwitchmodsDACH/Bannlisten/main/mdg_unauthorized_advertising_list.txt")
+      fetch("https://raw.githubusercontent.com/TwitchmodsDACH/Bannlisten/main/mdg_seller_advertising_list.txt")
         .then((response) => response.text())
         .then((data) => {
             usersToBan.push(...data.split("\n").filter(Boolean));
@@ -771,8 +771,8 @@ document.addEventListener('DOMContentLoaded', () => {
             insertText(Array.from(queueList))
             if (queueList.size != "0") { toggleImport(); renderList(); }
         });
-      document.getElementById("replaceFooter").innerHTML = "Geladene Liste mdg_unauthorized_advertising_list.txt anzeigen"
-      document.getElementById("replaceFooter").href = "https://raw.githubusercontent.com/TwitchmodsDACH/Bannlisten/main/mdg_unauthorized_advertising_list.txt"
+      document.getElementById("replaceFooter").innerHTML = "Geladene Liste mdg_seller_advertising_list.txt anzeigen"
+      document.getElementById("replaceFooter").href = "https://raw.githubusercontent.com/TwitchmodsDACH/Bannlisten/main/mdg_seller_advertising_list.txt"
       function dumdidum() {
         document.getElementById("mdgBtnAdvertising").innerHTML = mdgBtnAdvertisingText
       }
