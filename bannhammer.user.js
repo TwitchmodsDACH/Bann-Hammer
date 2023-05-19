@@ -2,7 +2,7 @@
 // @name            TwitchModsDACH Bann-Hammer (by RaidHammer)
 // @description     A tool for moderating Twitch easier during hate raids
 // @namespace       https://github.com/TwitchmodsDACH/Bann-Hammer
-// @version         3.0
+// @version         3.1
 // @match           *://www.twitch.tv/*
 // @run-at          document-idle
 // @author          TwitchModsDACH (sofa). The original code is from victornpb
@@ -51,7 +51,7 @@
     var mdgBtnSec = "➕ isds_security_list"
     var mdgBtnUnbanText = "➕ isds_UNBAN"
     var mdgBtnViewerBotsText = "➕ isds_viewer_bots"
-    var mdgBtnFlirtyMadText = "➕ isds_flirty_mad"
+    var mdgBtnFlirtyMadText = "➕ isds_mad_tos"
     var mdgBtnSpamBotsText = "➕ isds_spam_bots"
     var mdgBtnStreamSniperText = "➕ isds_streamsniper"
     var replaceFooter = "none"
@@ -399,6 +399,7 @@
     d.querySelector(".ignoreAll").onclick = ignoreAll;
     d.querySelector(".banAll").onclick = banAll;
     d.querySelector(".closeBtn").onclick = hide;
+    d.querySelector(".modChannels").onclick = addModChannelsAll;
     d.querySelector(".unbanAll").onclick = unbanAll;
     d.querySelector(".back").onclick = toggleBack;
     d.querySelector(".pause").onclick = togglePause;
@@ -1101,7 +1102,7 @@ function modMenu() {
             const listItem = document.createElement('li');
             const linkItem = document.createElement('a');
             linkItem.innerText = "Bitte lies die Anleitung hier";
-            linkItem.href = "https://github.com/TwitchmodsDACH/Bann-Hammer";
+            linkItem.href = "https://github.com/TwitchmodsDACH/Bann-Hammer#Mod-Men%C3%BC";
             linkItem.target = "_blank";
             linkItem.title = "Anleitung lesen";
             listItem.appendChild(linkItem);
@@ -1136,7 +1137,7 @@ function modMenu() {
     style.textContent = css;
     document.head.appendChild(style);
 
-    const selector = "#your-element-selector";
+    const selector = "#modMenu";
     const element = document.querySelector(selector);
     if (element) {
         element.style.animation = "pulse 2s infinite";
