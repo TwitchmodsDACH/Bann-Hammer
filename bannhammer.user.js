@@ -2,7 +2,7 @@
 // @name            TwitchModsDACH Bann-Hammer (by RaidHammer)
 // @description     A tool for moderating Twitch easier during hate raids
 // @namespace       https://github.com/TwitchmodsDACH/Bann-Hammer
-// @version         3.1
+// @version         3.1.1
 // @match           *://www.twitch.tv/*
 // @run-at          document-idle
 // @author          TwitchModsDACH (sofa). The original code is from victornpb
@@ -39,7 +39,7 @@
     document.head.appendChild(jqueryUIScript);
 
     // Globle required Variables
-    var myVersion = "3.0"
+    var myVersion = "3.1.1"
     var text;
     var banReason;
     var urlBannlisten = "https://github.com/TwitchmodsDACH/Bannlisten"
