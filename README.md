@@ -121,24 +121,6 @@ Das bedeutet:
 
 ***Werden Coockies und das LocalStorage gelöscht, müssen alle Listen noch einmal gebannt werden!***
 
-### Postion des BannHammer Menü verändern
-Wem die Position des Menüs nicht gefällt, kann die Position im Code angepasst werden:
-
-```
-        .raidhammer {
-            position: fixed;
-            bottom: 10px;
-            right: 800px;      <<< je kleiner, umso näher am Mod-Schwert unter dem Chat
-            z-index: 99999999;
-            background-color: var(--color-background-base);
-            color: var(--color-text-base);
-            border: var(--border-width-default) solid var(--color-border-base);
-            box-shadow: var(--shadow-elevation-2);
-            padding: 5px;
-            min-width: 500px;
-      }
-```
-
 ### Das Tool läuft eine Weile, dann kommt ein Fehler auf der Website von Twitch
 Dann ist vermutlich für euer Setup die Geschwindigkeit zu hoch für die MassenBann/MassenUnbann funktionen.
 Das könnt ihr an diesen beiden Stellen anpassen:
