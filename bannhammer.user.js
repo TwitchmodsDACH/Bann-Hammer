@@ -2,10 +2,10 @@
 // @name            TwitchModsDACH Bann-Hammer (by RaidHammer)
 // @description     A tool for moderating Twitch easier during hate raids
 // @namespace       https://github.com/TwitchmodsDACH/Bann-Hammer
-// @version         3.1.1.2
+// @version         3.1.1.3
 // @match           *://www.twitch.tv/*
 // @run-at          document-idle
-// @author          TwitchModsDACH (sofa). The original code is from victornpb
+// @author          TwitchModsDACH - The original code is from victornpb
 // @homepageURL     https://github.com/TwitchmodsDACH/Bann-Hammer
 // @supportURL      https://github.com/TwitchmodsDACH/Bann-Hammer/issues
 // @contributionURL https://github.com/TwitchmodsDACH/Bann-Hammer
@@ -39,7 +39,7 @@
     document.head.appendChild(jqueryUIScript);
 
     // Globle required Variables
-    var myVersion = "3.1.1.1"
+    var myVersion = "3.1.1.3"
     var text;
     var banReason;
     var urlBannlisten = "https://github.com/TwitchmodsDACH/Bannlisten"
@@ -596,7 +596,7 @@
       fetch("https://raw.githubusercontent.com/TwitchmodsDACH/Bannlisten/main/isds_hate_troll_list_0_g.txt")
         .then((response) => response.text())
         .then((data) => {
-            usersToBan.push(...data.spit("\n").filter(Boolean));
+            usersToBan.push(...data.split("\n").filter(Boolean));
             usersToBan.forEach(name => userAlreadyBanned(name.replace(/\r/g, ""), "mdgBtnTrolls0"))
             textarea.value = '';
             insertText(Array.from(queueList))
@@ -748,7 +748,7 @@
         document.getElementById("banReason").value = urlBannlisten
       }
       queueList.clear();
-      var usersToBa = [];
+      var usersToBan = [];
       fetch("https://raw.githubusercontent.com/TwitchmodsDACH/Bannlisten/main/isds_follower_bot_list.txt")
         .then((response) => response.text())
         .then((data) => {
@@ -835,7 +835,6 @@
       setTimeout(dumdidum, 5000)
     }
 
-
     // Functions to ban/unban/ignore/accountage
     function ignoreAll() {
       console.log(LOGPREFIX, 'Ignoring all...', queueList);
@@ -881,7 +880,7 @@
           await delay(1000);
         }
       }
-      addModChannels(user);
+     addModChannels(user);
       await delay(100);
       }
     }
@@ -952,7 +951,7 @@
       try{
         sendMessageOld(msg);
       } catch(_) {
-        sendMessageSate(msg);
+        sendMessageSlate(msg);
       }
     }
 
@@ -1125,7 +1124,7 @@ function modMenu() {
     }
 
     const links = processStoredModChannels();
-    createDropdownMeu(links);
+    createDropdownMenu(links);
         const css = `
         @keyframes pulse {
             0% { transform: scale(1); }
