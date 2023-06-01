@@ -2,10 +2,10 @@
 // @name            TwitchModsDACH Bann-Hammer (by RaidHammer)
 // @description     A tool for moderating Twitch easier during hate raids
 // @namespace       https://github.com/TwitchmodsDACH/Bann-Hammer
-// @version         3.1.1
+// @version         3.1.1.1
 // @match           *://www.twitch.tv/*
 // @run-at          document-idle
-// @author          TwitchModsDACH (sofa). The original code is from victornpb
+// @author          TwitchModsDACH - The original code is from victornpb
 // @homepageURL     https://github.com/TwitchmodsDACH/Bann-Hammer
 // @supportURL      https://github.com/TwitchmodsDACH/Bann-Hammer/issues
 // @contributionURL https://github.com/TwitchmodsDACH/Bann-Hammer
@@ -39,7 +39,7 @@
     document.head.appendChild(jqueryUIScript);
 
     // Globle required Variables
-    var myVersion = "3.1.1"
+    var myVersion = "3.1.1.1"
     var text;
     var banReason;
     var urlBannlisten = "https://github.com/TwitchmodsDACH/Bannlisten"
@@ -73,9 +73,9 @@
       activeChannel = urlParts[urlParts.length - 1]
     }
     var TMDLocalStorageBanList = activeChannel + "_banlist"
-    var TMDLocalStorageUnBanList = activeChannel + "_unbanlist"
+    var TMDLocalStorageUnBanList = activeChannel + "_unbanlist1"
     var bannedUsersStore = JSON.parse(localStorage.getItem(TMDLocalStorageBanList)) || [];
-    var unbannedUsersStore = JSON.parse(localStorage.getItem(TMDLocalStorageBanList)) || [];
+    var unbannedUsersStore = JSON.parse(localStorage.getItem(TMDLocalStorageUnBanList)) || [];
     var modChannelList = new Set();
     var TMDLocalStorageModChannels = "myModChannels"
     var modChannelStore = JSON.parse(localStorage.getItem(TMDLocalStorageModChannels)) || [];
@@ -646,7 +646,7 @@
             usersToBan.forEach(name => userAlreadyBanned(name.replace(/\r/g, ""), "mdgBtnTrolls2"))
             textarea.value = '';
             insertText(Array.from(queueList))
-            if (queueList.size != "0") { toggleImport(); renderList(); }
+           if (queueList.size != "0") { toggleImport(); renderList(); }
         });
       document.getElementById("replaceFooter").innerHTML = "Geladene Liste 'isds_hate_troll_list_n_z.txt' anzeigen"
       document.getElementById("replaceFooter").href = "https://raw.githubusercontent.com/TwitchmodsDACH/Bannlisten/main/isds_hate_troll_list_n_z.txt"
@@ -799,7 +799,7 @@
       fetch("https://raw.githubusercontent.com/TwitchmodsDACH/Bannlisten/main/isds_spam_bot_list.txt")
         .then((response) => response.text())
         .then((data) => {
-            usersToBan.push(...data.split("\n").filter(Boolean));
+            usersToBanpush(...data.split("\n").filter(Boolean));
             usersToBan.forEach(name => userAlreadyBanned(name.replace(/\r/g, ""), "mdgBtnSpamBots"));
             textarea.value = '';
             if (queueList.size != "0") { toggleImport(); renderList(); }
@@ -1011,7 +1011,7 @@
         <button class="accountage" data-user="${item}" title="Schreibt ''!accountage ${item}'' in den Chat">?</button>
         <button class="ignore" data-user="${item}" title="Benutzer aus Liste entfernen">❌</button>
         <button class="unban" data-user="${item}" title="Benutzer entbannen">Unban</button>
-        <button class="ban" data-user="${item}" title="Benutzer bannen">Ban</button>
+        <button class="ban" data-user="${item}" title="Benutzer banen">Ban</button>
         <button class="addModChannels" data-user="${item}" title="Kanal als Mod-Kanal hinzufügen">➕⚔</button>
         <button class="removeModChannel" data-user="${item}" title="Kanal als Mod-Kanal entfernen">➖⚔</button>
         <span><a href="https://twitch-tools.rootonline.de/followinglist_viewer.php?username=${item}" title="Dieser User folgt....(Weiterleitung zu comanderroot)" target="_blank" rel="noopener noreferrer">${item}</a></span>
@@ -1159,3 +1159,4 @@ function modMenu() {
   }, intervalDuration);
 })();
 
+	
