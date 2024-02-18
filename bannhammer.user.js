@@ -282,7 +282,7 @@
         </div>
         <div style="align:center">
           <button id="mdgBtnAdvertising" class="mdgBtnAdvertising" style="width:32%" title="Importiert isds_advertising Liste">${mdgBtnAdvertisingText}</button>
-          <button id="mdgBtnSpamBots" class="mdgBtnSpamBots" style="width:32%" title="Importiert isds_spam_bots Liste">${mdgBtnSpamBotsText}</button>
+          <button id="mdgBtnSpamBots" class="mdgBtnSpamBots" style="width:33%" title="Importiert isds_spam_bots Liste">${mdgBtnSpamBotsText}</button>
           <button id="isds" class="isds" style="width:32%" title="Webseite des Institut für Sicherheit und Daten-Analyse im Streaming">https://isds.tech</button>
         </div>
         <div style="align:center">
