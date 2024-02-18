@@ -1,8 +1,8 @@
 // ==UserScript==
-// @name            TwitchModsDACH Bann-Hammer (by RaidHammer)
+// @name            Test
 // @description     A tool for moderating Twitch easier during hate raids
-// @namespace       https://github.com/TwitchmodsDACH/Bann-Hammer
-// @version         3.1.1.3
+// @namespace       Test
+// @version         3.1.1.4
 // @match           *://www.twitch.tv/*
 // @run-at          document-idle
 // @author          TwitchModsDACH - The original code is from victornpb
@@ -54,6 +54,8 @@
     var mdgBtnFlirtyMadText = "➕ isds_mad_tos"
     var mdgBtnSpamBotsText = "➕ isds_spam_bots"
     var mdgBtnStreamSniperText = "➕ isds_streamsniper"
+    var mdgBtnFakeScamText = "➕ isds_fake_scam"
+    var mdgBtnPornBotText = "➕ isds_porn_bots"
     var replaceFooter = "none"
     var isPaused = false;
     var queueList = new Set();
@@ -280,8 +282,12 @@
         </div>
         <div style="align:center">
           <button id="mdgBtnAdvertising" class="mdgBtnAdvertising" style="width:32%" title="Importiert isds_advertising Liste">${mdgBtnAdvertisingText}</button>
-          <button id="mdgBtnSpamBots" class="mdgBtnSpamBots" style="width:33%" title="Importiert isds_spam_bots Liste">${mdgBtnSpamBotsText}</button>
+          <button id="mdgBtnSpamBots" class="mdgBtnSpamBots" style="width:32%" title="Importiert isds_spam_bots Liste">${mdgBtnSpamBotsText}</button>
           <button id="isds" class="isds" style="width:32%" title="Webseite des Institut für Sicherheit und Daten-Analyse im Streaming">https://isds.tech</button>
+        </div>
+        <div style="align:center">
+          <button id="mdgBtnFakeScam" class="mdgBtnFakeScam" style="width:32%" title="Importiert isds_fake_scam Liste">${mdgBtnFakeScamText}</button>
+          <button id="mdgBtnPornBot" class="mdgBtnPornBot" style="width:33%" title="Importiert isds_spam_bots Liste">${mdgBtnPornBotText}</button>
         </div>
     </div>
     <div class="body">
@@ -416,6 +422,8 @@
     d.querySelector(".import button.mdgBtnAdvertising").onclick = importMDGAdvertising;
     d.querySelector(".import button.mdgBtnSpamBots").onclick = importMDGSpamBots;
     d.querySelector(".import button.tmdBtnStreamSniper").onclick = importMDGStreamSniper;
+    d.querySelector(".import button.mdgBtnFakeScam").onclick = importMDGFakeScam;
+    d.querySelector(".import button.mdgBtnPornBot").onclick = importMDGPorn;
     d.querySelector(".import button.importBtn").onclick = importList;
 
     // delegated events
@@ -834,6 +842,53 @@
       }
       setTimeout(dumdidum, 5000)
     }
+
+      function importMDGFakeScam() {
+      queueList.clear();
+      var usersToBan = [];
+      if (document.getElementById("banReason").value == "") {
+        document.getElementById("banReason").value = urlBannlisten
+      }
+      fetch("https://raw.githubusercontent.com/TwitchmodsDACH/Bannlisten/main/isds_fake_scam_list.txt")
+        .then((response) => response.text())
+        .then((data) => {
+            usersToBan.push(...data.split("\n").filter(Boolean));
+            usersToBan.forEach(name => userAlreadyBanned(name.replace(/\r/g, ""), "mdgBtnFakeScam"));
+            textarea.value = '';
+            insertText(Array.from(queueList))
+            if (queueList.size != "0") { toggleImport(); renderList(); }
+        });
+      document.getElementById("replaceFooter").innerHTML = "Geladene Liste isds_fake_scam_list.txt anzeigen"
+      document.getElementById("replaceFooter").href = "https://raw.githubusercontent.com/TwitchmodsDACH/Bannlisten/main/isds_fake_scam_list.txt"
+      function dumdidum() {
+        document.getElementById("mdgBtnFakeScam").innerHTML = mdgBtnFakeScamText
+      }
+      setTimeout(dumdidum, 5000)
+    }
+
+      function importMDGPorn() {
+      queueList.clear();
+      var usersToBan = [];
+      if (document.getElementById("banReason").value == "") {
+        document.getElementById("banReason").value = urlBannlisten
+      }
+      fetch("https://raw.githubusercontent.com/TwitchmodsDACH/Bannlisten/main/isds_porn_bot_acc_list.txt")
+        .then((response) => response.text())
+        .then((data) => {
+            usersToBan.push(...data.split("\n").filter(Boolean));
+            usersToBan.forEach(name => userAlreadyBanned(name.replace(/\r/g, ""), "mdgBtnPornBot"));
+            textarea.value = '';
+            insertText(Array.from(queueList))
+            if (queueList.size != "0") { toggleImport(); renderList(); }
+        });
+      document.getElementById("replaceFooter").innerHTML = "Geladene Liste isds_porn_bot_acc_list.txt anzeigen"
+      document.getElementById("replaceFooter").href = "https://raw.githubusercontent.com/TwitchmodsDACH/Bannlisten/main/isds_porn_bot_acc_list.txt"
+      function dumdidum() {
+        document.getElementById("mdgBtnPornBot").innerHTML = mdgBtnPornBotText
+      }
+      setTimeout(dumdidum, 5000)
+    }
+
 
     // Functions to ban/unban/ignore/accountage
     function ignoreAll() {
