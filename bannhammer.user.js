@@ -1,7 +1,7 @@
 // ==UserScript==
-// @name            Test
+// @name            TwitchModsDACH Bann-Hammer (by RaidHammer)
 // @description     A tool for moderating Twitch easier during hate raids
-// @namespace       Test
+// @namespace       TwitchModsDACH Bann-Hammer (by RaidHammer)
 // @version         3.1.1.4
 // @match           *://www.twitch.tv/*
 // @run-at          document-idle
