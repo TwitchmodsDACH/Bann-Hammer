@@ -39,7 +39,7 @@
     document.head.appendChild(jqueryUIScript);
 
     // Globle required Variables
-    var myVersion = "3.1.1.3"
+    var myVersion = "3.1.1.4"
     var text;
     var banReason;
     var urlBannlisten = "https://github.com/TwitchmodsDACH/Bannlisten"
