@@ -264,6 +264,7 @@
         <div style="align:center">
           <button id="mdgBtnSec" class="mdgBtnSec" style="width:32%" title="Importiert isds_security_ban Liste">${mdgBtnSec}</button>
           <button id="mdgBtnViewerBots" class="mdgBtnViewerBots" style="width:33%" title="Importiert isds_viewerbot Liste">${mdgBtnViewerBotsText}</button>
+          <button id="mdgBtnPornBot" class="mdgBtnPornBot" style="width:32%" title="Importiert isds_porn_bots Liste">${mdgBtnPornBotText}</button>
         </div>
         <div style="align:center">
           <button id="mdgBtnFlirtyMad" class="mdgBtnFlirtyMad" style="width:32%" title="Importiert isds_mad_tos Liste">${mdgBtnFlirtyMadText}</button>
@@ -274,9 +275,6 @@
           <button id="mdgBtnAdvertising" class="mdgBtnAdvertising" style="width:32%" title="Importiert isds_advertising Liste">${mdgBtnAdvertisingText}</button>
           <button id="mdgBtnSpamBots" class="mdgBtnSpamBots" style="width:33%" title="Importiert isds_spam_bots Liste">${mdgBtnSpamBotsText}</button>
           <button id="isds" class="isds" style="width:32%" title="Webseite des Institut für Sicherheit und Daten-Analyse im Streaming">https://isds.tech</button>
-        </div>
-        <div style="align:center">
-          <button id="mdgBtnPornBot" class="mdgBtnPornBot" style="width:33%" title="Importiert isds_porn_bots Liste">${mdgBtnPornBotText}</button>
         </div>
     </div>
     <div class="body">
