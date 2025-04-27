@@ -53,8 +53,6 @@
     var mdgBtnViewerBotsText = "➕ isds_viewer_bots"
     var mdgBtnFlirtyMadText = "➕ isds_mad_tos"
     var mdgBtnSpamBotsText = "➕ isds_spam_bots"
-    var mdgBtnStreamSniperText = "➕ isds_streamsniper"
-    var mdgBtnFakeScamText = "➕ isds_fake_scam"
     var mdgBtnPornBotText = "➕ isds_porn_bots"
     var replaceFooter = "none"
     var isPaused = false;
@@ -266,7 +264,6 @@
         <div style="align:center">
           <button id="mdgBtnSec" class="mdgBtnSec" style="width:32%" title="Importiert isds_security_ban Liste">${mdgBtnSec}</button>
           <button id="mdgBtnViewerBots" class="mdgBtnViewerBots" style="width:33%" title="Importiert isds_viewerbot Liste">${mdgBtnViewerBotsText}</button>
-          <button id="tmdBtnStreamSniper" class="tmdBtnStreamSniper" style="width:32%" title="Importiert isds_streamsniper Liste">${mdgBtnStreamSniperText}</button>
         </div>
         <div style="align:center">
           <button id="mdgBtnFlirtyMad" class="mdgBtnFlirtyMad" style="width:32%" title="Importiert isds_mad_tos Liste">${mdgBtnFlirtyMadText}</button>
@@ -279,7 +276,6 @@
           <button id="isds" class="isds" style="width:32%" title="Webseite des Institut für Sicherheit und Daten-Analyse im Streaming">https://isds.tech</button>
         </div>
         <div style="align:center">
-          <button id="mdgBtnFakeScam" class="mdgBtnFakeScam" style="width:32%" title="Importiert isds_fake_scam Liste">${mdgBtnFakeScamText}</button>
           <button id="mdgBtnPornBot" class="mdgBtnPornBot" style="width:33%" title="Importiert isds_spam_bots Liste">${mdgBtnPornBotText}</button>
         </div>
     </div>
@@ -446,8 +442,6 @@
     d.querySelector(".import button.mdgBtnFollowBot").onclick = importMDGFollowBot;
     d.querySelector(".import button.mdgBtnAdvertising").onclick = importMDGAdvertising;
     d.querySelector(".import button.mdgBtnSpamBots").onclick = importMDGSpamBots;
-    d.querySelector(".import button.tmdBtnStreamSniper").onclick = importMDGStreamSniper;
-    d.querySelector(".import button.mdgBtnFakeScam").onclick = importMDGFakeScam;
     d.querySelector(".import button.mdgBtnPornBot").onclick = importMDGPorn;
     d.querySelector(".import button.importBtn").onclick = importList;
 
@@ -717,26 +711,6 @@
         mdgBtnSpamBotsText,
         "Geladene Liste isds_spam_bot_list.txt anzeigen",
         "https://raw.githubusercontent.com/TwitchmodsDACH/Bannlisten/main/isds_spam_bot_list.txt"
-      );
-    }
-
-    function importMDGStreamSniper() {
-      importMDGGeneric(
-        "https://raw.githubusercontent.com/TwitchmodsDACH/Bannlisten/main/isds_streamsniper_list.txt",
-        "tmdBtnStreamSniper",
-        mdgBtnStreamSniperText,
-        "Geladene Liste isds_streamsniper_list.txt anzeigen",
-        "https://raw.githubusercontent.com/TwitchmodsDACH/Bannlisten/main/isds_streamsniper_list.txt"
-      );
-    }
-
-    function importMDGFakeScam() {
-      importMDGGeneric(
-        "https://raw.githubusercontent.com/TwitchmodsDACH/Bannlisten/main/isds_fake_scam_list.txt",
-        "mdgBtnFakeScam",
-        mdgBtnFakeScamText,
-        "Geladene Liste isds_fake_scam_list.txt anzeigen",
-        "https://raw.githubusercontent.com/TwitchmodsDACH/Bannlisten/main/isds_fake_scam_list.txt"
       );
     }
 
