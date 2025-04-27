@@ -276,7 +276,7 @@
           <button id="isds" class="isds" style="width:32%" title="Webseite des Institut für Sicherheit und Daten-Analyse im Streaming">https://isds.tech</button>
         </div>
         <div style="align:center">
-          <button id="mdgBtnPornBot" class="mdgBtnPornBot" style="width:33%" title="Importiert isds_spam_bots Liste">${mdgBtnPornBotText}</button>
+          <button id="mdgBtnPornBot" class="mdgBtnPornBot" style="width:33%" title="Importiert isds_porn_bots Liste">${mdgBtnPornBotText}</button>
         </div>
     </div>
     <div class="body">
